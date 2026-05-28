@@ -130,3 +130,58 @@ private fun SignUpScreenPreview() {
         SignUpScreen()
     }
 }
+
+@Preview(name = "값이 있을때", showBackground = true)
+@Composable
+private fun FilledTextPreview() {
+    PracticeTheme {
+        Column(
+            modifier = Modifier
+                .padding(top = 112.dp, start = 32.dp, end = 32.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SignUpTextField(
+                modifier = Modifier.padding(top = 36.dp),
+                value = "홍길동",
+                onValueChange = {},
+                label = "UserName"
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12345",
+                onValueChange = {},
+                label = "Password"
+            )
+        }
+    }
+}
+
+@Preview(name = "사용자이름 에러", showBackground = true)
+@Composable
+private fun UserNameErrorPreview() {
+    PracticeTheme {
+        SignUpTextField(
+            value = "김",
+            onValueChange = {},
+            label = "UserName",
+            isError = true,
+            errorMessage = "이름은 2자 이상 5자 이하로 입력해주세요."
+        )
+    }
+}
+
+@Preview(name = "비밀번호 포맷 에러", showBackground = true)
+@Composable
+private fun PasswordFormatErrorPreview() {
+    PracticeTheme {
+        PasswordTextField(
+            value = "abcdefgh",
+            onValueChange = {},
+            label = "Password",
+            isError = true,
+            errorMessage = "비밀번호는 영문과 숫자를 포함해야 합니다."
+        )
+    }
+}
+

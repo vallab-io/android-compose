@@ -8,8 +8,8 @@ import org.junit.Rule
 import org.junit.Test
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
-import vallab.practice.screen.EMAIL_REGEX
-import vallab.practice.screen.PASSWORD_REGEX
+import vallab.practice.validation.SignUpValidation.Companion.EMAIL_REGEX
+import vallab.practice.validation.SignUpValidation.Companion.PASSWORD_REGEX
 
 class InputValidationTest {
 
