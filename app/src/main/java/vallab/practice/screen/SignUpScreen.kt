@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import vallab.practice.R
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
@@ -30,7 +33,10 @@ const val EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"
 const val PASSWORD_REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}$"
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+) {
     var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -54,8 +60,15 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
 
     val passwordMatchError = passwordConfirm.isNotEmpty() && password != passwordConfirm
 
+    val isButtonEnabled = userName.isNotBlank() && userNameError == null &&
+            email.isNotBlank() && !emailError &&
+            password.isNotBlank() && passwordError == null &&
+            passwordConfirm.isNotBlank() && !passwordMatchError
+
+    val scope = rememberCoroutineScope()
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 112.dp, start = 32.dp, end = 32.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -106,10 +119,15 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
         )
 
         Button(
-            onClick = {},
+            onClick = {
+                scope.launch {
+                    snackbarHostState.showSnackbar("회원가입 완료!")
+                }
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF2196F3)
             ),
+            enabled = isButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 30.dp)
