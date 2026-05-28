@@ -8,8 +8,7 @@ import org.junit.Rule
 import org.junit.Test
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
-import vallab.practice.validation.SignUpValidation.Companion.EMAIL_REGEX
-import vallab.practice.validation.SignUpValidation.Companion.PASSWORD_REGEX
+import vallab.practice.validation.SignUpValidation
 
 class InputValidationTest {
 
@@ -22,24 +21,14 @@ class InputValidationTest {
 
     @Before
     fun setUp() {
+        val signUpValidation = SignUpValidation()
+
         composeTestRule.setContent {
-            val userNameError = when {
-                username.value.isEmpty() -> null
-                username.value.length !in 2..5 -> "이름은 2~5자여야 합니다."
-                else -> null
-            }
-
-            val emailError =
-                email.value.isNotEmpty() && !email.value.matches(Regex(EMAIL_REGEX))
-
-            val passwordError = when {
-                password.value.isEmpty() -> null
-                password.value.length !in 8..16 -> "비밀번호는 8~16자여야 합니다."
-                !password.value.matches(Regex(PASSWORD_REGEX)) -> "비밀번호는 영문과 숫자를 포함해야 합니다."
-                else -> null
-            }
+            val userNameError = signUpValidation.userNameError(username.value)
+            val emailError = signUpValidation.emailError(email.value)
+            val passwordError = signUpValidation.passwordError(password.value)
             val passwordMatchError =
-                passwordConfirm.value.isNotEmpty() && password.value != passwordConfirm.value
+                signUpValidation.passwordMatchError(password.value, passwordConfirm.value)
 
             SignUpTextField(
                 value = username.value,
@@ -53,7 +42,7 @@ class InputValidationTest {
                 value = email.value,
                 onValueChange = { email.value = it },
                 label = "email",
-                isError = emailError,
+                isError = emailError != null,
                 errorMessage = "이메일 형식이 올바르지 않습니다."
             )
             PasswordTextField(
@@ -67,7 +56,7 @@ class InputValidationTest {
                 value = passwordConfirm.value,
                 onValueChange = { passwordConfirm.value = it },
                 label = "Password Confirm",
-                isError = passwordMatchError,
+                isError = passwordMatchError != null,
                 errorMessage = "비밀번호가 일치하지 않습니다."
             )
         }
