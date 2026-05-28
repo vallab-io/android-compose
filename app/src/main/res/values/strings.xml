@@ -13,4 +13,6 @@
     <string name="username_format">이름에는 숫자나 기호가 포함될 수 없습니다.</string>
     <string name="password_format">비밀번호는 영문과 숫자를 포함해야 합니다.</string>
 
+    <string name="signup_success">회원가입 완료!</string>
+
 </resources>
