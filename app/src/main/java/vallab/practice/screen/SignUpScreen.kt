@@ -32,7 +32,7 @@ import vallab.practice.validation.SignUpValidation
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onShowMessage: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
 
@@ -50,8 +50,6 @@ fun SignUpScreen(
             email.isNotBlank() && emailError == null &&
             password.isNotBlank() && passwordError == null &&
             passwordConfirm.isNotBlank() && passwordMatchError == null
-
-    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
@@ -106,9 +104,7 @@ fun SignUpScreen(
 
         Button(
             onClick = {
-                scope.launch {
-                    snackbarHostState.showSnackbar(message = context.getString(R.string.signup_success))
-                }
+                onShowMessage(context.getString(R.string.signup_success))
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.blue_100)
