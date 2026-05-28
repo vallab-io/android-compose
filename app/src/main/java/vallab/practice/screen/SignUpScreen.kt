@@ -17,7 +17,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,44 +27,29 @@ import vallab.practice.R
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
 import vallab.practice.ui.theme.PracticeTheme
-
-
-const val USERNAME_REGEX = "^[a-zA-Z가-힣]+$"
-const val EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"
-const val PASSWORD_REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}$"
+import vallab.practice.validation.SignUpValidation
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
+    val context = LocalContext.current
+
     var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
 
-    val userNameError = when {
-        userName.isEmpty() -> null
-        userName.length !in 2..5 -> stringResource(R.string.username_length)
-        !userName.matches(Regex(USERNAME_REGEX)) -> stringResource(R.string.username_format)
-        else -> null
-    }
-
-    val emailError = email.isNotEmpty() && !email.matches(Regex(EMAIL_REGEX))
-
-    val passwordError = when {
-        password.isEmpty() -> null
-        password.length !in 8..16 -> stringResource(R.string.password_length)
-        !password.matches(Regex(PASSWORD_REGEX)) -> stringResource(R.string.password_format)
-        else -> null
-    }
-
-    val passwordMatchError = passwordConfirm.isNotEmpty() && password != passwordConfirm
+    val userNameError = SignUpValidation().userNameError(userName)
+    val emailError = SignUpValidation().emailError(email)
+    val passwordError = SignUpValidation().passwordError(password)
+    val passwordMatchError = SignUpValidation().passwordMatchError(password, passwordConfirm)
 
     val isButtonEnabled = userName.isNotBlank() && userNameError == null &&
-            email.isNotBlank() && !emailError &&
+            email.isNotBlank() && emailError == null &&
             password.isNotBlank() && passwordError == null &&
-            passwordConfirm.isNotBlank() && !passwordMatchError
+            passwordConfirm.isNotBlank() && passwordMatchError == null
 
     val scope = rememberCoroutineScope()
 
@@ -92,7 +78,7 @@ fun SignUpScreen(
         SignUpTextField(
             modifier = Modifier.padding(top = 30.dp),
             value = email,
-            isError = emailError,
+            isError = emailError != null,
             errorMessage = stringResource(R.string.email_error),
             label = stringResource(R.string.email_label),
             onValueChange = { email = it },
@@ -113,7 +99,7 @@ fun SignUpScreen(
             value = passwordConfirm,
             onValueChange = { passwordConfirm = it },
             label = stringResource(R.string.password_confirm_label),
-            isError = passwordMatchError,
+            isError = passwordMatchError != null,
             errorMessage = stringResource(R.string.password_not_match)
 
         )
@@ -121,11 +107,11 @@ fun SignUpScreen(
         Button(
             onClick = {
                 scope.launch {
-                    snackbarHostState.showSnackbar("회원가입 완료!")
+                    snackbarHostState.showSnackbar(message = context.getString(R.string.signup_success))
                 }
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2196F3)
+                containerColor = colorResource(R.color.blue_100)
             ),
             enabled = isButtonEnabled,
             modifier = Modifier
@@ -139,7 +125,7 @@ fun SignUpScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpScreenPreview() {
+private fun SignUpScreenPreview() {
     PracticeTheme {
         SignUpScreen()
     }
