@@ -79,7 +79,7 @@ fun SignUpScreen(
             modifier = Modifier.padding(top = 30.dp),
             value = email,
             isError = emailError != null,
-            errorMessage = stringResource(R.string.email_error),
+            errorMessage = emailError,
             label = stringResource(R.string.email_label),
             onValueChange = { email = it },
         )
@@ -100,7 +100,7 @@ fun SignUpScreen(
             onValueChange = { passwordConfirm = it },
             label = stringResource(R.string.password_confirm_label),
             isError = passwordMatchError != null,
-            errorMessage = stringResource(R.string.password_not_match)
+            errorMessage = passwordMatchError
 
         )
 
