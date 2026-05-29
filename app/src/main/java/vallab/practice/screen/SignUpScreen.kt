@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +20,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import vallab.practice.R
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
@@ -41,10 +38,12 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
 
-    val userNameError = SignUpValidation().userNameError(userName)
-    val emailError = SignUpValidation().emailError(email)
-    val passwordError = SignUpValidation().passwordError(password)
-    val passwordMatchError = SignUpValidation().passwordMatchError(password, passwordConfirm)
+    val signUpValidation = remember { SignUpValidation() }
+
+    val userNameError = signUpValidation.userNameError(userName)
+    val emailError = signUpValidation.emailError(email)
+    val passwordError = signUpValidation.passwordError(password)
+    val passwordMatchError = signUpValidation.passwordMatchError(password, passwordConfirm)
 
     val isButtonEnabled = userName.isNotBlank() && userNameError == null &&
             email.isNotBlank() && emailError == null &&
