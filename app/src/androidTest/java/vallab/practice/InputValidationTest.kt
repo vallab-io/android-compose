@@ -8,6 +8,10 @@ import org.junit.Rule
 import org.junit.Test
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
+import vallab.practice.screen.emailErrorMessage
+import vallab.practice.screen.passwordErrorMessage
+import vallab.practice.screen.passwordMatchErrorMessage
+import vallab.practice.screen.userNameErrorMessage
 import vallab.practice.validation.SignUpValidation
 
 class InputValidationTest {
@@ -35,7 +39,7 @@ class InputValidationTest {
                 onValueChange = { username.value = it },
                 label = "UserName",
                 isError = userNameError != null,
-                errorMessage = userNameError
+                errorMessage = userNameError?.let { userNameErrorMessage(it) }
             )
 
             SignUpTextField(
@@ -43,21 +47,21 @@ class InputValidationTest {
                 onValueChange = { email.value = it },
                 label = "email",
                 isError = emailError != null,
-                errorMessage = "이메일 형식이 올바르지 않습니다."
+                errorMessage = emailError?.let { emailErrorMessage(it) }
             )
             PasswordTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
                 label = "Password",
                 isError = passwordError != null,
-                errorMessage = passwordError
+                errorMessage = passwordError?.let { passwordErrorMessage(it) }
             )
             PasswordTextField(
                 value = passwordConfirm.value,
                 onValueChange = { passwordConfirm.value = it },
                 label = "Password Confirm",
                 isError = passwordMatchError != null,
-                errorMessage = "비밀번호가 일치하지 않습니다."
+                errorMessage = passwordMatchError?.let { passwordMatchErrorMessage(it) }
             )
         }
 
@@ -70,7 +74,7 @@ class InputValidationTest {
 
         // then
         composeTestRule
-            .onNodeWithText("이름은 2~5자여야 합니다.")
+            .onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.")
             .assertDoesNotExist()
     }
 
@@ -81,7 +85,7 @@ class InputValidationTest {
 
         // then
         composeTestRule
-            .onNodeWithText("이름은 2~5자여야 합니다.")
+            .onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.")
             .assertExists()
     }
 
@@ -139,11 +143,11 @@ class InputValidationTest {
         passwordConfirm.value = testPwValid()
 
         // then
-        composeTestRule.onNodeWithText("이름은 2~5자여야 합니다.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.").assertDoesNotExist()
         composeTestRule.onNodeWithText("이메일 형식이 올바르지 않습니다.").assertDoesNotExist()
-        composeTestRule.onNodeWithText("비밀번호는 8~16자여야 합니다").assertDoesNotExist()
+        composeTestRule.onNodeWithText("비밀번호는 8~16자여야 합니다.").assertDoesNotExist()
         composeTestRule.onNodeWithText("비밀번호는 영문과 숫자를 포함해야 합니다.").assertDoesNotExist()
-        composeTestRule.onNodeWithText("비밀번호가 일치하지 않습니다").assertDoesNotExist()
+        composeTestRule.onNodeWithText("비밀번호가 일치하지 않습니다.").assertDoesNotExist()
     }
 
     private fun testPwShort() = "ab" + "123"
