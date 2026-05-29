@@ -67,7 +67,7 @@ fun SignUpScreen(
             value = userName,
             label = stringResource(R.string.username_label),
             isError = userNameError != null,
-            errorMessage = userNameError,
+            errorMessage = userNameError?.let { userNameErrorMessage(it) },
             onValueChange = { userName = it },
         )
 
@@ -76,7 +76,7 @@ fun SignUpScreen(
             modifier = Modifier.padding(top = 30.dp),
             value = email,
             isError = emailError != null,
-            errorMessage = emailError,
+            errorMessage = emailError?.let { emailErrorMessage(it) },
             label = stringResource(R.string.email_label),
             onValueChange = { email = it },
         )
@@ -88,7 +88,7 @@ fun SignUpScreen(
             label = stringResource(R.string.password_label),
             onValueChange = { password = it },
             isError = passwordError != null,
-            errorMessage = passwordError
+            errorMessage = passwordError?.let { passwordErrorMessage(it) }
         )
 
         PasswordTextField(
@@ -97,7 +97,7 @@ fun SignUpScreen(
             onValueChange = { passwordConfirm = it },
             label = stringResource(R.string.password_confirm_label),
             isError = passwordMatchError != null,
-            errorMessage = passwordMatchError
+            errorMessage = passwordMatchError?.let { passwordMatchErrorMessage(it) }
 
         )
 
