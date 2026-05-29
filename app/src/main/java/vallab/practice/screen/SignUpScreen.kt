@@ -152,31 +152,3 @@ private fun FilledTextPreview() {
     }
 }
 
-@Preview(name = "사용자이름 에러", showBackground = true)
-@Composable
-private fun UserNameErrorPreview() {
-    PracticeTheme {
-        SignUpTextField(
-            value = "김",
-            onValueChange = {},
-            label = "UserName",
-            isError = true,
-            errorMessage = "이름은 2자 이상 5자 이하로 입력해주세요."
-        )
-    }
-}
-
-@Preview(name = "비밀번호 포맷 에러", showBackground = true)
-@Composable
-private fun PasswordFormatErrorPreview() {
-    PracticeTheme {
-        PasswordTextField(
-            value = "abcdefgh",
-            onValueChange = {},
-            label = "Password",
-            isError = true,
-            errorMessage = "비밀번호는 영문과 숫자를 포함해야 합니다."
-        )
-    }
-}
-

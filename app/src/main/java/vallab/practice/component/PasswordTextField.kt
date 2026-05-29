@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
 fun PasswordTextField(
@@ -33,4 +35,19 @@ fun PasswordTextField(
         modifier = modifier
             .fillMaxWidth()
     )
+}
+
+
+@Preview(name = "비밀번호 포맷 에러", showBackground = true)
+@Composable
+private fun PasswordFormatErrorPreview() {
+    PracticeTheme {
+        PasswordTextField(
+            value = "abcdefgh",
+            onValueChange = {},
+            label = "Password",
+            isError = true,
+            errorMessage = "비밀번호는 영문과 숫자를 포함해야 합니다."
+        )
+    }
 }
