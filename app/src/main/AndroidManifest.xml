@@ -29,6 +29,11 @@
             android:exported="false"
             android:theme="@style/Theme.Androidcompose" />
 
+        <activity
+            android:name=".CartDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Androidcompose" />
+
     </application>
 
 </manifest>

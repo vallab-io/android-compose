@@ -1,5 +1,6 @@
 package vallab.practice.screen
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import vallab.practice.CartDetailActivity
 import vallab.practice.R
 import vallab.practice.model.Product
 import vallab.practice.model.dummyProducts
@@ -44,6 +47,8 @@ fun ProductDetailScreen(
     onBackButtonClick: () -> Unit,
     product: Product
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -62,7 +67,11 @@ fun ProductDetailScreen(
         },
         bottomBar = {
             Button(
-                onClick = {},
+                onClick = {
+                    context.startActivity(
+                        Intent(context, CartDetailActivity::class.java)
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(
