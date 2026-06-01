@@ -9,11 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import vallab.practice.R
 import vallab.practice.ui.theme.PracticeTheme
 
 
@@ -48,7 +50,7 @@ fun ProductItem(
                 lineHeight = 18.sp
             )
             Text(
-                text = "%,d원".format(product.price),
+                text = stringResource(R.string.price_format).format(product.price),
                 lineHeight = 16.sp
             )
         }

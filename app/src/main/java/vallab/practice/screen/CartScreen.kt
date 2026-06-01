@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import vallab.practice.R
@@ -34,7 +35,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "상품 목록", modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.product_list), modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                     )
                 },
@@ -45,7 +46,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
                                 contentColor = colorResource(R.color.black)
                             )
                         ) {
-                            Icon(Icons.Filled.ShoppingCart, contentDescription = "장바구니")
+                            Icon(Icons.Filled.ShoppingCart, contentDescription = stringResource(R.string.shoppingCart_description))
                         }
                     })
         }) { innerPadding ->
