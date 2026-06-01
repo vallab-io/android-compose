@@ -23,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import vallab.practice.CartDetailActivity
 import vallab.practice.ProductDetailActivity
 import vallab.practice.R
 import vallab.practice.component.ProductItem
@@ -47,7 +48,10 @@ fun CartScreen(modifier: Modifier = Modifier) {
                 actions =
                     {
                         IconButton(
-                            onClick = {}, colors = IconButtonDefaults.iconButtonColors(
+                            onClick = {
+                                context.startActivity(
+                                    Intent(context, CartDetailActivity::class.java))
+                            }, colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = colorResource(R.color.black)
                             )
                         ) {
