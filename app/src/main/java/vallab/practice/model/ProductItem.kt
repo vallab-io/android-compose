@@ -68,3 +68,49 @@ fun ProductItemPreview() {
         ProductItem(product = dummyProducts[0])
     }
 }
+
+
+@Preview(showBackground = true, name = "긴 상품명")
+@Composable
+private fun ProductItemPreview_LongName() {
+    PracticeTheme {
+        ProductItem(
+            product = Product(
+                id = 1,
+                name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
+                price = 12000,
+                imageUrl = ""
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "큰 금액 포맷확인")
+@Composable
+private fun ProductItemPreview_LargePrice() {
+    PracticeTheme {
+        ProductItem(
+            product = Product(
+                id = 1,
+                name = "상품명",
+                price = 123456789,
+                imageUrl = ""
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "가격 0원")
+@Composable
+private fun ProductItemPreview_ZeroPrice() {
+    PracticeTheme {
+        ProductItem(
+            product = Product(
+                id = 1,
+                name = "상품명",
+                price = 0,
+                imageUrl = ""
+            )
+        )
+    }
+}
