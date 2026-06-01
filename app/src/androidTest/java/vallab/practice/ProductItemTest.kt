@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import vallab.practice.model.Product
-import vallab.practice.model.ProductItem
+import vallab.practice.component.ProductItem
 
 class ProductItemTest {
 

@@ -1,4 +1,4 @@
-package vallab.practice.model
+package vallab.practice.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import vallab.practice.R
+import vallab.practice.model.Product
+import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
 

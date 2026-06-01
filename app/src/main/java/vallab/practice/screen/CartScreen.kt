@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import vallab.practice.R
-import vallab.practice.model.ProductItem
+import vallab.practice.component.ProductItem
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
