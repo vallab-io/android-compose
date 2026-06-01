@@ -41,6 +41,7 @@ import vallab.practice.ui.theme.PracticeTheme
 @Composable
 fun ProductDetailScreen(
     modifier: Modifier = Modifier,
+    onBackButtonClick: () -> Unit,
     product: Product
 ) {
     Scaffold(
@@ -50,7 +51,7 @@ fun ProductDetailScreen(
                 title = { Text(text = stringResource(R.string.title_product_detail)) },
                 modifier = Modifier.fillMaxWidth(),
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { onBackButtonClick() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_description)
@@ -69,8 +70,10 @@ fun ProductDetailScreen(
                     contentColor = Color.White
                 )
             ) {
-                Text(text = stringResource(R.string.add_to_cart),
-                    fontSize = 22.sp)
+                Text(
+                    text = stringResource(R.string.add_to_cart),
+                    fontSize = 22.sp
+                )
             }
         }
     ) { innerPadding ->
@@ -125,6 +128,8 @@ fun ProductDetailScreen(
 @Composable
 private fun ProductDetailScreenPreview() {
     PracticeTheme {
-        ProductDetailScreen(product = dummyProducts[0])
+        ProductDetailScreen(
+            product = dummyProducts[0],
+            onBackButtonClick = {})
     }
 }

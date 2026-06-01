@@ -21,7 +21,7 @@ class ProductDetailActivity : ComponentActivity() {
         val product = dummyProducts.find { it.id == id } ?: return finish()
 
         setContent {
-            ProductDetailScreen(product = product, onBackButtonClick = { })
+            ProductDetailScreen(product = product, onBackButtonClick = { finish() })
         }
     }
 
