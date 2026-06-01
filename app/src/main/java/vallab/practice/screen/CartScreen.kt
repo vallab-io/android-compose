@@ -1,5 +1,6 @@
 package vallab.practice.screen
 
+import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,10 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import vallab.practice.ProductDetailActivity
 import vallab.practice.R
 import vallab.practice.component.ProductItem
 import vallab.practice.model.dummyProducts
@@ -29,13 +32,15 @@ import vallab.practice.ui.theme.PracticeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.product_list), modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.product_list),
+                        modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                     )
                 },
@@ -46,7 +51,10 @@ fun CartScreen(modifier: Modifier = Modifier) {
                                 contentColor = colorResource(R.color.black)
                             )
                         ) {
-                            Icon(Icons.Filled.ShoppingCart, contentDescription = stringResource(R.string.shoppingCart_description))
+                            Icon(
+                                Icons.Filled.ShoppingCart,
+                                contentDescription = stringResource(R.string.shoppingCart_description)
+                            )
                         }
                     })
         }) { innerPadding ->
@@ -56,7 +64,14 @@ fun CartScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(innerPadding),
         ) {
             items(dummyProducts) { product ->
-                ProductItem(product = product)
+                ProductItem(
+                    product = product,
+                    onClick = {
+                        val intent = Intent(context, ProductDetailActivity::class.java).apply {
+                            putExtra("productId", product.id.toString())
+                        }
+                        context.startActivity(intent)
+                    })
             }
         }
     }

@@ -1,5 +1,6 @@
 package vallab.practice.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -25,9 +26,10 @@ import vallab.practice.ui.theme.PracticeTheme
 @Composable
 fun ProductItem(
     product: Product,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.clickable(onClick = onClick)) {
         Box(
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 2.dp)
@@ -67,7 +69,7 @@ fun ProductItem(
 @Composable
 fun ProductItemPreview() {
     PracticeTheme {
-        ProductItem(product = dummyProducts[0])
+        ProductItem(product = dummyProducts[0], onClick = {})
     }
 }
 
@@ -77,11 +79,12 @@ fun ProductItemPreview() {
 private fun ProductItemPreview_LongName() {
     PracticeTheme {
         ProductItem(
+            onClick = {},
             product = Product(
                 id = 1,
                 name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
                 price = 12000,
-                imageUrl = ""
+                imageUrl = "",
             )
         )
     }
@@ -92,6 +95,7 @@ private fun ProductItemPreview_LongName() {
 private fun ProductItemPreview_LargePrice() {
     PracticeTheme {
         ProductItem(
+            onClick = {},
             product = Product(
                 id = 1,
                 name = "상품명",
@@ -107,6 +111,7 @@ private fun ProductItemPreview_LargePrice() {
 private fun ProductItemPreview_ZeroPrice() {
     PracticeTheme {
         ProductItem(
+            onClick = {},
             product = Product(
                 id = 1,
                 name = "상품명",
