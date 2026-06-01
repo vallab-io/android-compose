@@ -6,8 +6,8 @@ import androidx.compose.ui.test.onNodeWithText
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import vallab.practice.model.Product
 import vallab.practice.component.ProductItem
+import vallab.practice.model.Product
 
 class ProductItemTest {
 
@@ -28,7 +28,7 @@ class ProductItemTest {
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            ProductItem(product = product.value)
+            ProductItem(product = product.value, onClick = {})
         }
     }
 

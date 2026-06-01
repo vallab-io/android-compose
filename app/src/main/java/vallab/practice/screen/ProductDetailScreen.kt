@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -106,7 +107,9 @@ fun ProductDetailScreen(
                 modifier = Modifier
                     .padding(15.dp),
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(
@@ -140,5 +143,27 @@ private fun ProductDetailScreenPreview() {
         ProductDetailScreen(
             product = dummyProducts[0],
             onBackButtonClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "길고 긴 이름")
+@Composable
+private fun ProductDetailScreenPreview_LongName() {
+    PracticeTheme {
+        ProductDetailScreen(
+            product = dummyProducts[0].copy(name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"),
+            onBackButtonClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "큰 금액")
+@Composable
+private fun ProductDetailScreenPreview_LargePrice() {
+    PracticeTheme {
+        ProductDetailScreen(
+            product = dummyProducts[0].copy(price = 123456789),
+            onBackButtonClick = {},
+        )
     }
 }
