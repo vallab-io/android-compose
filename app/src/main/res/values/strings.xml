@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">android-compose</string>
+    <string name="product_list">상품 목록</string>
+    <string name="price_format">%,d원</string>
+    <string name="shoppingCart_description">장바구니</string>
+    <string name="back_description">뒤로 가기</string>
+    <string name="add_to_cart">장바구니 담기</string>
+    <string name="title_product_detail">상품 상세</string>
+    <string name="text_price">금액</string>
+    <string name="title_cart_">장바구니</string>
 </resources>
