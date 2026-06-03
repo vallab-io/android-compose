@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import vallab.practice.CartDetailActivity
 import vallab.practice.R
+import vallab.practice.model.Cart
 import vallab.practice.model.Product
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.Blue100
@@ -70,11 +71,13 @@ fun ProductDetailScreen(
         bottomBar = {
             Button(
                 onClick = {
+                    Cart.addOne(product)
                     context.startActivity(
                         Intent(context, CartDetailActivity::class.java)
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .navigationBarsPadding(),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(
