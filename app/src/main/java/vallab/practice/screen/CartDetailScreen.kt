@@ -72,7 +72,7 @@ fun CartDetailScreen(
                 )
             ) {
                 Text(
-                    text = stringResource(R.string.order_button, totalPrice),
+                    text = stringResource(R.string.button_order, totalPrice),
                     fontSize = 22.sp
                 )
             }

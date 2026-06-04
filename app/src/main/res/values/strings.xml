@@ -9,9 +9,8 @@
     <string name="text_price">금액</string>
     <string name="title_cart_">장바구니</string>
     <string name="product_cancel">상품 제거</string>
-    <string name="icon_minus">마이너스</string>
-    <string name="icon_plus">플러스</string>
-    <string name="button_order">주문하기</string>
+    <string name="icon_minus">수량 마이너스</string>
+    <string name="icon_plus">수량 플러스</string>
     <string name="total_price">(%1$d)</string>
-    <string name="order_button">주문하기(%1$,d원)</string>
+    <string name="button_order">주문하기(%1$,d원)</string>
 </resources>
