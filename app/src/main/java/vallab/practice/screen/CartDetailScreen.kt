@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import vallab.practice.R
 import vallab.practice.component.CartDetailItem
 import vallab.practice.model.Cart
+import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.Blue100
 import vallab.practice.ui.theme.PracticeTheme
 
@@ -98,9 +99,56 @@ fun CartDetailScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true, name = "기본 빈 화면")
 @Composable
 private fun CartDetailScreenPreview() {
+    PracticeTheme {
+        CartDetailScreen(onBackButtonClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "아이템 2개")
+@Composable
+private fun CartDetailScreenPreview_TwoItems() {
+    Cart.items.forEach { Cart.removeAll(it.product) }
+    Cart.addOne(dummyProducts[0])
+    Cart.addOne(dummyProducts[1])
+    PracticeTheme {
+        CartDetailScreen(onBackButtonClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "수량 2개")
+@Composable
+private fun CartDetailScreenPreview_Count2() {
+    Cart.items.forEach { Cart.removeAll(it.product) }
+    Cart.addOne(dummyProducts[0])
+    Cart.addOne(dummyProducts[0])
+    PracticeTheme {
+        CartDetailScreen(onBackButtonClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "아주 긴 이름")
+@Composable
+private fun CartDetailScreenPreview_LongName() {
+    Cart.items.forEach { Cart.removeAll(it.product) }
+    val longNameDummyProduct =
+        dummyProducts[0].copy(name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하")
+    Cart.addOne(longNameDummyProduct)
+    PracticeTheme {
+        CartDetailScreen(onBackButtonClick = {})
+    }
+}
+
+
+@Preview(showBackground = true, name = "큰 금액")
+@Composable
+private fun CartDetailScreenPreview_LargePrice() {
+    Cart.items.forEach { Cart.removeAll(it.product) }
+    val largePriceDummyProduct =
+        dummyProducts[0].copy(price = 123456789)
+    Cart.addOne(largePriceDummyProduct)
     PracticeTheme {
         CartDetailScreen(onBackButtonClick = {})
     }

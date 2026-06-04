@@ -27,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -131,13 +133,34 @@ fun CartDetailItem(
     }
 }
 
+class CartItemPreviewParameterProvider : PreviewParameterProvider<CartItem> {
+    override val values = sequenceOf(
+        CartItem(dummyProducts[0], count = 1),
+        CartItem(dummyProducts[1], count = 2),
+        CartItem(
+            product = dummyProducts[0].copy(
+                name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
+                price = 12000,
+            ),
+            count = 9999999,
+        ),
+        CartItem(dummyProducts[0].copy(price = 123456789), count = 3),
+    )
+}
+
 
 @Preview(showBackground = true)
 @Composable
-private fun CartDetailItemPreview() {
+private fun CartDetailItemPreview(
+    @PreviewParameter(CartItemPreviewParameterProvider::class) cartItem: CartItem,
+) {
     PracticeTheme {
         CartDetailItem(
-            cartItem = CartItem(dummyProducts[0], count = 1)
+            cartItem = cartItem,
+            onCountPlus = {},
+            onCountMinus = {},
+            onRemoveAll = {},
+            modifier = Modifier.padding(12.dp),
         )
     }
 }
