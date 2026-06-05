@@ -67,7 +67,7 @@ fun ProductItem(
                     containerColor = Color.White,
                     onClick = onCountPlus,
                 ) {
-                    Icon(Icons.Filled.Add, contentDescription = null, tint = Color.Black)
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.count_fab), tint = Color.Black)
                 }
             } else {
                 CountComponent(
