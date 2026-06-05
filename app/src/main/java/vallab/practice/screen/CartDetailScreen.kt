@@ -17,10 +17,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -41,8 +40,8 @@ fun CartDetailScreen(
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit
 ) {
-    var cartItems by remember { mutableStateOf(Cart.items) }
-    val totalPrice = cartItems.let { Cart.totalPrice }
+    val cartItems = Cart.items
+    val totalPrice by remember { derivedStateOf { Cart.totalPrice } }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -84,13 +83,13 @@ fun CartDetailScreen(
                 CartDetailItem(
                     cartItem = cartItem,
                     onCountPlus = {
-                        cartItems = Cart.addOne(cartItem.product)
+                        Cart.addOne(cartItem.product)
                     },
                     onCountMinus = {
-                        cartItems = Cart.removeOne(cartItem.product)
+                        Cart.removeOne(cartItem.product)
                     },
                     onRemoveAll = {
-                        cartItems = Cart.removeAll(cartItem.product)
+                        Cart.removeAll(cartItem.product)
                     },
                     modifier = Modifier.padding(12.dp)
                 )

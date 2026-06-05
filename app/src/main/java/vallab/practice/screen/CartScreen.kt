@@ -27,6 +27,7 @@ import vallab.practice.CartDetailActivity
 import vallab.practice.ProductDetailActivity
 import vallab.practice.R
 import vallab.practice.component.ProductItem
+import vallab.practice.model.Cart
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
@@ -68,14 +69,18 @@ fun CartScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(innerPadding),
         ) {
             items(dummyProducts) { product ->
+                val cartItem = Cart.items.find { it.product.id == product.id }
                 ProductItem(
                     product = product,
+                    cartItem = cartItem,
                     onClick = {
                         val intent = Intent(context, ProductDetailActivity::class.java).apply {
                             putExtra("productId", product.id.toString())
                         }
                         context.startActivity(intent)
-                    })
+                    },
+                    onCountPlus = { Cart.addOne(product) },
+                    onCountMinus = { Cart.removeOne(product) })
             }
         }
     }

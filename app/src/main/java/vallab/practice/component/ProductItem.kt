@@ -6,9 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import vallab.practice.R
+import vallab.practice.model.CartItem
 import vallab.practice.model.Product
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
@@ -25,9 +34,12 @@ import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
 fun ProductItem(
-    product: Product,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    product: Product,
+    cartItem: CartItem? = null,
+    onCountPlus: () -> Unit = {},
+    onCountMinus: () -> Unit = {},
+    onClick: () -> Unit,
 ) {
     Column(modifier = modifier.clickable(onClick = onClick)) {
         Box(
@@ -44,6 +56,30 @@ fun ProductItem(
                     .padding(top = 6.dp),
                 contentScale = ContentScale.Crop,
             )
+
+            if (cartItem == null) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(50.dp)
+                        .align(Alignment.BottomEnd),
+                    shape = CircleShape,
+                    containerColor = Color.White,
+                    onClick = onCountPlus,
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = null, tint = Color.Black)
+                }
+            } else {
+                CountComponent(
+                    cartItem = cartItem,
+                    onCountPlus = onCountPlus,
+                    onCountMinus = onCountMinus,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, bottom = 6.dp),
+                )
+            }
         }
 
         Column(
