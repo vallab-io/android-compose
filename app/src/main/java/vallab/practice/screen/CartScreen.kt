@@ -51,7 +51,8 @@ fun CartScreen(modifier: Modifier = Modifier) {
                         IconButton(
                             onClick = {
                                 context.startActivity(
-                                    Intent(context, CartDetailActivity::class.java))
+                                    Intent(context, CartDetailActivity::class.java)
+                                )
                             }, colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = colorResource(R.color.black)
                             )
@@ -87,8 +88,24 @@ fun CartScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-@Preview
+@Preview(name = "기본 빈 화면")
 fun CartScreenPreview() {
+    PracticeTheme {
+        CartScreen()
+    }
+}
+
+@Preview(showBackground = true, name = "상품 담겼을때 수량조절 표시")
+@Composable
+private fun CartScreenPreview_PartialCart() {
+    Cart.items.clear()
+
+    Cart.addOne(dummyProducts[0])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+
     PracticeTheme {
         CartScreen()
     }
