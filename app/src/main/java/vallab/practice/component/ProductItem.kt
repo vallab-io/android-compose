@@ -157,3 +157,15 @@ private fun ProductItemPreview_ZeroPrice() {
         )
     }
 }
+
+@Preview(showBackground = true, name = "수량조절창 표시")
+@Composable
+private fun ProductItemPreview_Show_Count() {
+    PracticeTheme {
+        ProductItem(
+            product = dummyProducts[0],
+            cartItem = CartItem(dummyProducts[0], count = 99),
+            onClick = {},
+        )
+    }
+}
