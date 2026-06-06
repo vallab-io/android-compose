@@ -25,10 +25,14 @@ class ProductItemTest {
 
     @Test
     fun `큰_금액이_포맷형태로_표시된다`() {
-        // when
-        product.value = product.value.copy(price = 123456789)
+        composeTestRule.setContent {
+            PracticeTheme {
+                ProductItem(
+                    product = product.value.copy(price = 123456789),
+                    onClick = {})
+            }
+        }
 
-        // then
         composeTestRule
             .onNodeWithText("123,456,789원")
             .assertExists()
@@ -36,6 +40,15 @@ class ProductItemTest {
 
     @Test
     fun `기본적으로_상품위에_FAB가_보인다`() {
+        composeTestRule.setContent {
+            PracticeTheme {
+                ProductItem(
+                    product = product.value,
+                    onClick = {},
+                )
+            }
+        }
+
         composeTestRule
             .onNodeWithContentDescription("수량 조절 버튼")
             .assertExists()
