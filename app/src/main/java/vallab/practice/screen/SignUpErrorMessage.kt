@@ -3,31 +3,31 @@ package vallab.practice.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import vallab.practice.R
-import vallab.practice.validation.EmailError
-import vallab.practice.validation.PasswordError
-import vallab.practice.validation.PasswordMatchError
-import vallab.practice.validation.UserNameError
+import vallab.practice.validation.EmailValidation
+import vallab.practice.validation.PasswordValidation
+import vallab.practice.validation.PasswordConfirmValidation
+import vallab.practice.validation.UserNameValidation
 
 @Composable
-fun userNameErrorMessage(error: UserNameError): String? = when (error) {
-    UserNameError.LENGTH -> stringResource(R.string.username_length_error)
-    UserNameError.FORMAT -> stringResource(R.string.username_format_error)
+fun userNameErrorMessage(error: UserNameValidation): String? = when (error) {
+    UserNameValidation.INVALID_LENGTH -> stringResource(R.string.username_length_error)
+    UserNameValidation.INVALID_FORMAT -> stringResource(R.string.username_format_error)
 }
 
 @Composable
-fun emailErrorMessage(error: EmailError): String? = when (error) {
-    EmailError.FORMAT -> stringResource(R.string.email_format_error)
+fun emailErrorMessage(error: EmailValidation): String? = when (error) {
+    EmailValidation.INVALID_FORMAT -> stringResource(R.string.email_format_error)
 }
 
 @Composable
-fun passwordErrorMessage(error: PasswordError): String? = when (error) {
-    PasswordError.LENGTH -> stringResource(R.string.password_length)
-    PasswordError.FORMAT -> stringResource(R.string.password_format_error)
+fun passwordErrorMessage(error: PasswordValidation): String? = when (error) {
+    PasswordValidation.INVALID_LENGTH -> stringResource(R.string.password_length)
+    PasswordValidation.INVALID_FORMAT -> stringResource(R.string.password_format_error)
 }
 
 @Composable
-fun passwordMatchErrorMessage(error: PasswordMatchError): String? = when (error) {
-    PasswordMatchError.MISMATCH -> stringResource(R.string.password_match_error)
+fun passwordMatchErrorMessage(error: PasswordConfirmValidation): String? = when (error) {
+    PasswordConfirmValidation.MISMATCH -> stringResource(R.string.password_match_error)
 }
 
 

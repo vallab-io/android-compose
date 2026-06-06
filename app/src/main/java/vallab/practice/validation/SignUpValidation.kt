@@ -2,29 +2,29 @@ package vallab.practice.validation
 
 class SignUpValidation {
 
-    fun userNameError(userName: String): UserNameError? = when {
+    fun validateUserName(userName: String): UserNameValidation? = when {
         userName.isEmpty() -> null
-        userName.length !in 2..5 -> UserNameError.LENGTH
-        !userName.matches(Regex(USERNAME_REGEX)) -> UserNameError.FORMAT
+        userName.length !in 2..5 -> UserNameValidation.INVALID_LENGTH
+        !userName.matches(Regex(USERNAME_REGEX)) -> UserNameValidation.INVALID_FORMAT
         else -> null
     }
 
-    fun emailError(email: String): EmailError? = when {
+    fun validateEmail(email: String): EmailValidation? = when {
         email.isEmpty() -> null
-        !email.matches(Regex(EMAIL_REGEX)) -> EmailError.FORMAT
+        !email.matches(Regex(EMAIL_REGEX)) -> EmailValidation.INVALID_FORMAT
         else -> null
     }
 
-    fun passwordError(password: String): PasswordError? = when {
+    fun validatePassword(password: String): PasswordValidation? = when {
         password.isEmpty() -> null
-        password.length !in 8..16 -> PasswordError.LENGTH
-        !password.matches(Regex(PASSWORD_REGEX)) -> PasswordError.FORMAT
+        password.length !in 8..16 -> PasswordValidation.INVALID_LENGTH
+        !password.matches(Regex(PASSWORD_REGEX)) -> PasswordValidation.INVALID_FORMAT
         else -> null
     }
 
-    fun passwordMatchError(password: String, passwordConfirm: String): PasswordMatchError? = when {
+    fun validatePasswordConfirm(password: String, passwordConfirm: String): PasswordConfirmValidation? = when {
         passwordConfirm.isEmpty() -> null
-        password != passwordConfirm -> PasswordMatchError.MISMATCH
+        password != passwordConfirm -> PasswordConfirmValidation.MISMATCH
         else -> null
     }
 

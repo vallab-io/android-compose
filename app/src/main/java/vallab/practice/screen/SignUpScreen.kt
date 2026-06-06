@@ -40,10 +40,10 @@ fun SignUpScreen(
 
     val signUpValidation = remember { SignUpValidation() }
 
-    val userNameError = signUpValidation.userNameError(userName)
-    val emailError = signUpValidation.emailError(email)
-    val passwordError = signUpValidation.passwordError(password)
-    val passwordMatchError = signUpValidation.passwordMatchError(password, passwordConfirm)
+    val userNameError = signUpValidation.validateUserName(userName)
+    val emailError = signUpValidation.validateEmail(email)
+    val passwordError = signUpValidation.validatePassword(password)
+    val passwordMatchError = signUpValidation.validatePasswordConfirm(password, passwordConfirm)
 
     val isButtonEnabled = userName.isNotBlank() && userNameError == null &&
             email.isNotBlank() && emailError == null &&

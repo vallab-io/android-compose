@@ -1,19 +1,19 @@
 package vallab.practice.validation
 
-enum class UserNameError{
-    LENGTH,
-    FORMAT
+enum class UserNameValidation{
+    INVALID_LENGTH,
+    INVALID_FORMAT
 }
 
-enum class EmailError{
-    FORMAT
+enum class EmailValidation{
+    INVALID_FORMAT
 }
 
-enum class PasswordError{
-    LENGTH,
-    FORMAT
+enum class PasswordValidation{
+    INVALID_LENGTH,
+    INVALID_FORMAT
 }
 
-enum class PasswordMatchError{
+enum class PasswordConfirmValidation{
     MISMATCH
 }

@@ -28,11 +28,11 @@ class InputValidationTest {
         val signUpValidation = SignUpValidation()
 
         composeTestRule.setContent {
-            val userNameError = signUpValidation.userNameError(username.value)
-            val emailError = signUpValidation.emailError(email.value)
-            val passwordError = signUpValidation.passwordError(password.value)
+            val userNameError = signUpValidation.validateUserName(username.value)
+            val emailError = signUpValidation.validateEmail(email.value)
+            val passwordError = signUpValidation.validatePassword(password.value)
             val passwordMatchError =
-                signUpValidation.passwordMatchError(password.value, passwordConfirm.value)
+                signUpValidation.validatePasswordConfirm(password.value, passwordConfirm.value)
 
             SignUpTextField(
                 value = username.value,
