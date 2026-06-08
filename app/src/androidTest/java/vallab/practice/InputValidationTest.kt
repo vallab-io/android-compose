@@ -6,31 +6,76 @@ import androidx.compose.ui.test.onNodeWithText
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
+import vallab.practice.screen.emailErrorMessage
+import vallab.practice.screen.passwordErrorMessage
+import vallab.practice.screen.passwordMatchErrorMessage
+import vallab.practice.screen.userNameErrorMessage
+import vallab.practice.validation.SignUpValidation
 
 class InputValidationTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
     private val username = mutableStateOf("")
+    private val email = mutableStateOf("")
+    private val password = mutableStateOf("")
+    private val passwordConfirm = mutableStateOf("")
 
     @Before
     fun setUp() {
+        val signUpValidation = SignUpValidation()
+
         composeTestRule.setContent {
-            val userNameError = when {
-                username.value.isEmpty() -> null
-                username.value.length !in 2..5 -> USERNAME_LENGTH_ERROR
-                else -> null
-            }
+            val userNameError = signUpValidation.validateUserName(username.value)
+            val emailError = signUpValidation.validateEmail(email.value)
+            val passwordError = signUpValidation.validatePassword(password.value)
+            val passwordMatchError =
+                signUpValidation.validatePasswordConfirm(password.value, passwordConfirm.value)
+
             SignUpTextField(
                 value = username.value,
                 onValueChange = { username.value = it },
                 label = "UserName",
                 isError = userNameError != null,
-                errorMessage = userNameError
+                errorMessage = userNameError?.let { userNameErrorMessage(it) }
+            )
+
+            SignUpTextField(
+                value = email.value,
+                onValueChange = { email.value = it },
+                label = "email",
+                isError = emailError != null,
+                errorMessage = emailError?.let { emailErrorMessage(it) }
+            )
+            PasswordTextField(
+                value = password.value,
+                onValueChange = { password.value = it },
+                label = "Password",
+                isError = passwordError != null,
+                errorMessage = passwordError?.let { passwordErrorMessage(it) }
+            )
+            PasswordTextField(
+                value = passwordConfirm.value,
+                onValueChange = { passwordConfirm.value = it },
+                label = "Password Confirm",
+                isError = passwordMatchError != null,
+                errorMessage = passwordMatchError?.let { passwordMatchErrorMessage(it) }
             )
         }
 
+    }
+
+    @Test
+    fun `이름_형식이_틀리면_에러메시지가_노출된다`() {
+        // when
+        username.value = "김컴포즈1"
+
+        // then
+        composeTestRule
+            .onNodeWithText("이름에는 숫자나 기호가 포함될 수 없습니다.")
+            .assertExists()
     }
 
     @Test
@@ -40,7 +85,7 @@ class InputValidationTest {
 
         // then
         composeTestRule
-            .onNodeWithText(USERNAME_LENGTH_ERROR)
+            .onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.")
             .assertDoesNotExist()
     }
 
@@ -51,12 +96,84 @@ class InputValidationTest {
 
         // then
         composeTestRule
-            .onNodeWithText(USERNAME_LENGTH_ERROR)
+            .onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.")
             .assertExists()
     }
 
+    @Test
+    fun `이메일_형식이_올바르면_에러메시지가_노출되지_않는다`() {
+        // when
+        email.value = "android12@naver.com"
 
-    companion object {
-        private const val USERNAME_LENGTH_ERROR = "이름은 2~5자여야 합니다."
+        // then
+        composeTestRule
+            .onNodeWithText("이메일 형식이 올바르지 않습니다.")
+            .assertDoesNotExist()
     }
+
+    @Test
+    fun 이메일_형식이_올바르지_않으면_에러메시지가_노출된다() {
+        // when
+        email.value = "android@"
+
+        // then
+        composeTestRule
+            .onNodeWithText("이메일 형식이 올바르지 않습니다.")
+            .assertExists()
+    }
+
+    @Test
+    fun 비밀번호_길이가_다르면_에러메시지가_노출된다() {
+        // when
+        password.value = testPwShort()
+
+        // then
+        composeTestRule
+            .onNodeWithText("비밀번호는 8~16자여야 합니다.")
+            .assertExists()
+    }
+
+    @Test
+    fun 비밀번호가_영문숫자조합이_아니면_에러메시지가_노출된다() {
+        // when
+        password.value = testPwInvalid()
+
+        // then
+        composeTestRule
+            .onNodeWithText("비밀번호는 영문과 숫자를 포함해야 합니다.")
+            .assertExists()
+    }
+
+    @Test
+    fun 비밀번호가_일치하지_않으면_에러메시지가_노출된다() {
+        // when
+        password.value = testPwValid()
+        passwordConfirm.value = testPwMismatch()
+
+        // then
+        composeTestRule
+            .onNodeWithText("비밀번호가 일치하지 않습니다.")
+            .assertExists()
+    }
+
+    @Test
+    fun 모든_값이_올바르게_작성되면_에러메시지가_노출되지_않는다() {
+        // when
+        username.value = "홍길동"
+        email.value = "android12@naver.com"
+        password.value = testPwValid()
+        passwordConfirm.value = testPwValid()
+
+        // then
+        composeTestRule.onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("이메일 형식이 올바르지 않습니다.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("비밀번호는 8~16자여야 합니다.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("비밀번호는 영문과 숫자를 포함해야 합니다.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("비밀번호가 일치하지 않습니다.").assertDoesNotExist()
+    }
+
+    private fun testPwShort() = "ab" + "123"
+    private fun testPwInvalid() = "123" + "456789"
+    private fun testPwValid() = "abc" + "12345"
+    private fun testPwMismatch() = "abc" + "12346"
 }

@@ -15,7 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,39 +24,34 @@ import vallab.practice.R
 import vallab.practice.component.PasswordTextField
 import vallab.practice.component.SignUpTextField
 import vallab.practice.ui.theme.PracticeTheme
-
-
-const val USERNAME_REGEX = "^[a-zA-Z가-힣]+$"
-const val EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"
-const val PASSWORD_REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}$"
+import vallab.practice.validation.SignUpValidation
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    onShowMessage: (String) -> Unit = {},
+) {
+    val context = LocalContext.current
+
     var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordConfirm by remember { mutableStateOf("") }
 
-    val userNameError = when {
-        userName.isEmpty() -> null
-        userName.length !in 2..5 -> stringResource(R.string.username_length)
-        !userName.matches(Regex(USERNAME_REGEX)) -> stringResource(R.string.username_format)
-        else -> null
-    }
+    val signUpValidation = remember { SignUpValidation() }
 
-    val emailError = email.isNotEmpty() && !email.matches(Regex(EMAIL_REGEX))
+    val userNameError = signUpValidation.validateUserName(userName)
+    val emailError = signUpValidation.validateEmail(email)
+    val passwordError = signUpValidation.validatePassword(password)
+    val passwordMatchError = signUpValidation.validatePasswordConfirm(password, passwordConfirm)
 
-    val passwordError = when {
-        password.isEmpty() -> null
-        password.length !in 8..16 -> stringResource(R.string.password_length)
-        !password.matches(Regex(PASSWORD_REGEX)) -> stringResource(R.string.password_format)
-        else -> null
-    }
-
-    val passwordMatchError = passwordConfirm.isNotEmpty() && password != passwordConfirm
+    val isButtonEnabled = userName.isNotBlank() && userNameError == null &&
+            email.isNotBlank() && emailError == null &&
+            password.isNotBlank() && passwordError == null &&
+            passwordConfirm.isNotBlank() && passwordMatchError == null
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 112.dp, start = 32.dp, end = 32.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +67,7 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
             value = userName,
             label = stringResource(R.string.username_label),
             isError = userNameError != null,
-            errorMessage = userNameError,
+            errorMessage = userNameError?.let { userNameErrorMessage(it) },
             onValueChange = { userName = it },
         )
 
@@ -79,8 +75,8 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
         SignUpTextField(
             modifier = Modifier.padding(top = 30.dp),
             value = email,
-            isError = emailError,
-            errorMessage = stringResource(R.string.email_error),
+            isError = emailError != null,
+            errorMessage = emailError?.let { emailErrorMessage(it) },
             label = stringResource(R.string.email_label),
             onValueChange = { email = it },
         )
@@ -92,7 +88,7 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
             label = stringResource(R.string.password_label),
             onValueChange = { password = it },
             isError = passwordError != null,
-            errorMessage = passwordError
+            errorMessage = passwordError?.let { passwordErrorMessage(it) }
         )
 
         PasswordTextField(
@@ -100,16 +96,19 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
             value = passwordConfirm,
             onValueChange = { passwordConfirm = it },
             label = stringResource(R.string.password_confirm_label),
-            isError = passwordMatchError,
-            errorMessage = stringResource(R.string.password_not_match)
+            isError = passwordMatchError != null,
+            errorMessage = passwordMatchError?.let { passwordMatchErrorMessage(it) }
 
         )
 
         Button(
-            onClick = {},
+            onClick = {
+                onShowMessage(context.getString(R.string.signup_success))
+            },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2196F3)
+                containerColor = colorResource(R.color.blue_100)
             ),
+            enabled = isButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 30.dp)
@@ -119,10 +118,122 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(name = "모든값이 있을때", showBackground = true)
 @Composable
-fun SignUpScreenPreview() {
+private fun SignUpScreen_Preview() {
     PracticeTheme {
-        SignUpScreen()
+        Column(
+            modifier = Modifier
+                .padding(top = 112.dp, start = 32.dp, end = 32.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Welcome to Compose 🚀",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 36.dp),
+                value = "김김김",
+                onValueChange = {},
+                label = "UserName",
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "android12@naver.com",
+                onValueChange = {},
+                label = "email",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12345",
+                onValueChange = {},
+                label = "Password",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12345",
+                onValueChange = {},
+                label = "Password Confirm",
+            )
+            Button(
+                onClick = {},
+                enabled = true,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.blue_100),
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+            ) {
+                Text("sign up")
+            }
+        }
     }
 }
+
+@Preview(name = "모든 상태 에러", showBackground = true)
+@Composable
+private fun SignUpScreenPreview_AllError() {
+    PracticeTheme {
+        Column(
+            modifier = Modifier
+                .padding(top = 112.dp, start = 32.dp, end = 32.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Welcome to Compose 🚀",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 36.dp),
+                value = "김",
+                onValueChange = {},
+                label = "UserName",
+                isError = true,
+                errorMessage = "이름은 2자 이상 5자 이하로 입력해주세요.",
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "android@",
+                onValueChange = {},
+                label = "email",
+                isError = true,
+                errorMessage = "이메일 형식이 올바르지 않습니다.",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc123",
+                onValueChange = {},
+                label = "Password",
+                isError = true,
+                errorMessage = "비밀번호는 8~16자여야 합니다.",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12346",
+                onValueChange = {},
+                label = "Password Confirm",
+                isError = true,
+                errorMessage = "비밀번호가 일치하지 않습니다.",
+            )
+            Button(
+                onClick = {},
+                enabled = false,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.blue_100),
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+            ) {
+                Text("sign up")
+            }
+        }
+    }
+}
+
