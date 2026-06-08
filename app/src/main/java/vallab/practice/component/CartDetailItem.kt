@@ -110,7 +110,7 @@ fun CartDetailItem(
                     )
 
                     CountComponent(
-                        cartItem = cartItem,
+                        count = cartItem.count,
                         onCountPlus = onCountPlus,
                         onCountMinus = onCountMinus
                     )

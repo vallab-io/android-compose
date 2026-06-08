@@ -20,14 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import vallab.practice.R
-import vallab.practice.model.CartItem
-import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
 fun CountComponent(
     modifier: Modifier = Modifier,
-    cartItem: CartItem,
+    count: Int,
     onCountPlus: () -> Unit,
     onCountMinus: () -> Unit,
 ) {
@@ -48,7 +46,7 @@ fun CountComponent(
             )
         }
 
-        Text(text = cartItem.count.toString(), fontSize = 20.sp)
+        Text(text = count.toString(), fontSize = 20.sp)
 
         IconButton(onClick = onCountPlus) {
             Icon(
@@ -64,7 +62,7 @@ fun CountComponent(
 private fun CountComponentPreview() {
     PracticeTheme {
         CountComponent(
-            cartItem = CartItem(dummyProducts[0], count = 3),
+            count = 3,
             onCountPlus = {},
             onCountMinus = {}
         )
