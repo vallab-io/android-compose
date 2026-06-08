@@ -11,12 +11,9 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,7 +23,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,10 +33,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import vallab.practice.CartDetailActivity
 import vallab.practice.R
+import vallab.practice.component.ButtonComponent
 import vallab.practice.model.Cart
 import vallab.practice.model.Product
 import vallab.practice.model.dummyProducts
-import vallab.practice.ui.theme.Blue100
 import vallab.practice.ui.theme.PracticeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,27 +65,15 @@ fun ProductDetailScreen(
             )
         },
         bottomBar = {
-            Button(
+            ButtonComponent(
+                text = stringResource(R.string.add_to_cart),
                 onClick = {
                     Cart.addOne(product)
                     context.startActivity(
                         Intent(context, CartDetailActivity::class.java)
                     )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(),
-                shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue100,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = stringResource(R.string.add_to_cart),
-                    fontSize = 22.sp
-                )
-            }
+                }
+            )
         }
     ) { innerPadding ->
         Column(

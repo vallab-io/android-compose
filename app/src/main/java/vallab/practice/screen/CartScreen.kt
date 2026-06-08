@@ -27,6 +27,7 @@ import vallab.practice.CartDetailActivity
 import vallab.practice.ProductDetailActivity
 import vallab.practice.R
 import vallab.practice.component.ProductItem
+import vallab.practice.model.Cart
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
@@ -50,7 +51,8 @@ fun CartScreen(modifier: Modifier = Modifier) {
                         IconButton(
                             onClick = {
                                 context.startActivity(
-                                    Intent(context, CartDetailActivity::class.java))
+                                    Intent(context, CartDetailActivity::class.java)
+                                )
                             }, colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = colorResource(R.color.black)
                             )
@@ -68,22 +70,42 @@ fun CartScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(innerPadding),
         ) {
             items(dummyProducts) { product ->
+                val count = Cart.items.find { it.product.id == product.id }?.count
                 ProductItem(
                     product = product,
+                    count = count,
                     onClick = {
                         val intent = Intent(context, ProductDetailActivity::class.java).apply {
                             putExtra("productId", product.id.toString())
                         }
                         context.startActivity(intent)
-                    })
+                    },
+                    onCountPlus = { Cart.addOne(product) },
+                    onCountMinus = { Cart.removeOne(product) })
             }
         }
     }
 }
 
 @Composable
-@Preview
+@Preview(name = "기본 빈 화면")
 fun CartScreenPreview() {
+    PracticeTheme {
+        CartScreen()
+    }
+}
+
+@Preview(showBackground = true, name = "상품 담겼을때 수량조절 표시")
+@Composable
+private fun CartScreenPreview_PartialCart() {
+    Cart.items.clear()
+
+    Cart.addOne(dummyProducts[0])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+    Cart.addOne(dummyProducts[3])
+
     PracticeTheme {
         CartScreen()
     }

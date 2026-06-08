@@ -13,4 +13,5 @@
     <string name="icon_plus">수량 플러스</string>
     <string name="total_price">(%1$d)</string>
     <string name="button_order">주문하기(%1$,d원)</string>
+    <string name="count_fab">수량 조절 버튼</string>
 </resources>

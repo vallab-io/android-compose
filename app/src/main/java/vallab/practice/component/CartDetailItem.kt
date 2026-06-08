@@ -5,13 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,9 +41,9 @@ import vallab.practice.ui.theme.PracticeTheme
 fun CartDetailItem(
     modifier: Modifier = Modifier,
     cartItem: CartItem,
-    onCountPlus: () -> Unit = {},
-    onCountMinus: () -> Unit = {},
-    onRemoveAll: () -> Unit = {},
+    onCountPlus: () -> Unit,
+    onCountMinus: () -> Unit,
+    onRemoveAll: () -> Unit,
 ) {
     OutlinedCard(
         shape = RoundedCornerShape(4.dp),
@@ -70,7 +69,9 @@ fun CartDetailItem(
                     text = cartItem.product.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(12.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -86,7 +87,7 @@ fun CartDetailItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 AsyncImage(
                     model = cartItem.product.imageUrl,
@@ -99,34 +100,20 @@ fun CartDetailItem(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 12.dp),
-                    horizontalAlignment = Alignment.End
+                        .height(100.dp),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        stringResource(R.string.price_format).format(cartItem.product.price),
+                        text = stringResource(R.string.price_format).format(cartItem.product.price),
+                        fontSize = 16.sp
                     )
 
-                    Row(
-                        modifier = Modifier.padding(top = 30.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        IconButton(onClick = onCountMinus) {
-                            Icon(
-                                imageVector = Icons.Filled.Remove,
-                                contentDescription = stringResource(R.string.icon_minus)
-                            )
-                        }
-
-                        Text(text = cartItem.count.toString(), fontSize = 20.sp)
-
-                        IconButton(onClick = onCountPlus) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = stringResource(R.string.icon_plus)
-                            )
-                        }
-                    }
+                    CountComponent(
+                        count = cartItem.count,
+                        onCountPlus = onCountPlus,
+                        onCountMinus = onCountMinus
+                    )
                 }
             }
         }

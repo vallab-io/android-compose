@@ -6,9 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,9 +33,12 @@ import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
 fun ProductItem(
-    product: Product,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    product: Product,
+    count: Int? = null,
+    onCountPlus: () -> Unit,
+    onCountMinus: () -> Unit,
+    onClick: () -> Unit,
 ) {
     Column(modifier = modifier.clickable(onClick = onClick)) {
         Box(
@@ -44,6 +55,34 @@ fun ProductItem(
                     .padding(top = 6.dp),
                 contentScale = ContentScale.Crop,
             )
+
+            if (count == null) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(50.dp)
+                        .align(Alignment.BottomEnd),
+                    shape = CircleShape,
+                    containerColor = Color.White,
+                    onClick = onCountPlus,
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.count_fab),
+                        tint = Color.Black
+                    )
+                }
+            } else {
+                CountComponent(
+                    count = count,
+                    onCountPlus = onCountPlus,
+                    onCountMinus = onCountMinus,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, bottom = 6.dp),
+                )
+            }
         }
 
         Column(
@@ -69,7 +108,11 @@ fun ProductItem(
 @Composable
 fun ProductItemPreview() {
     PracticeTheme {
-        ProductItem(product = dummyProducts[0], onClick = {})
+        ProductItem(
+            product = dummyProducts[0], onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
+        )
     }
 }
 
@@ -80,6 +123,8 @@ private fun ProductItemPreview_LongName() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
@@ -96,6 +141,8 @@ private fun ProductItemPreview_LargePrice() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "상품명",
@@ -112,12 +159,28 @@ private fun ProductItemPreview_ZeroPrice() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "상품명",
                 price = 0,
                 imageUrl = ""
             )
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "수량조절창 표시")
+@Composable
+private fun ProductItemPreview_Show_Count() {
+    PracticeTheme {
+        ProductItem(
+            product = dummyProducts[0],
+            count = 99,
+            onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
         )
     }
 }
