@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 import vallab.practice.component.ProductItem
 import vallab.practice.model.Cart
-import vallab.practice.model.CartItem
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
 
@@ -29,7 +28,10 @@ class ProductItemTest {
             PracticeTheme {
                 ProductItem(
                     product = product.value.copy(price = 123456789),
-                    onClick = {})
+                    onClick = {},
+                    onCountPlus = {},
+                    onCountMinus = {}
+                )
             }
         }
 
@@ -45,6 +47,8 @@ class ProductItemTest {
                 ProductItem(
                     product = product.value,
                     onClick = {},
+                    onCountPlus = {},
+                    onCountMinus = {}
                 )
             }
         }
@@ -59,8 +63,10 @@ class ProductItemTest {
         composeTestRule.setContent {
             ProductItem(
                 product = product.value,
-                cartItem = CartItem(product.value, count = 1),
+                count = 1,
                 onClick = {},
+                onCountPlus = {},
+                onCountMinus = {},
             )
         }
         composeTestRule.onNodeWithContentDescription("수량 플러스").assertExists()
@@ -76,6 +82,7 @@ class ProductItemTest {
                     product = product.value,
                     onClick = {},
                     onCountPlus = { Cart.addOne(product.value) },
+                    onCountMinus = {},
                 )
             }
         }

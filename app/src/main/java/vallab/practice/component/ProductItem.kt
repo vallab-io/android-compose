@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import vallab.practice.R
-import vallab.practice.model.CartItem
 import vallab.practice.model.Product
 import vallab.practice.model.dummyProducts
 import vallab.practice.ui.theme.PracticeTheme
@@ -36,9 +35,9 @@ import vallab.practice.ui.theme.PracticeTheme
 fun ProductItem(
     modifier: Modifier = Modifier,
     product: Product,
-    cartItem: CartItem? = null,
-    onCountPlus: () -> Unit = {},
-    onCountMinus: () -> Unit = {},
+    count: Int? = null,
+    onCountPlus: () -> Unit,
+    onCountMinus: () -> Unit,
     onClick: () -> Unit,
 ) {
     Column(modifier = modifier.clickable(onClick = onClick)) {
@@ -57,7 +56,7 @@ fun ProductItem(
                 contentScale = ContentScale.Crop,
             )
 
-            if (cartItem == null) {
+            if (count == null) {
                 FloatingActionButton(
                     modifier = Modifier
                         .padding(6.dp)
@@ -67,11 +66,15 @@ fun ProductItem(
                     containerColor = Color.White,
                     onClick = onCountPlus,
                 ) {
-                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.count_fab), tint = Color.Black)
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.count_fab),
+                        tint = Color.Black
+                    )
                 }
             } else {
                 CountComponent(
-                    cartItem = cartItem,
+                    count = count,
                     onCountPlus = onCountPlus,
                     onCountMinus = onCountMinus,
                     modifier = Modifier
@@ -105,7 +108,11 @@ fun ProductItem(
 @Composable
 fun ProductItemPreview() {
     PracticeTheme {
-        ProductItem(product = dummyProducts[0], onClick = {})
+        ProductItem(
+            product = dummyProducts[0], onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
+        )
     }
 }
 
@@ -116,6 +123,8 @@ private fun ProductItemPreview_LongName() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
@@ -132,6 +141,8 @@ private fun ProductItemPreview_LargePrice() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "상품명",
@@ -148,6 +159,8 @@ private fun ProductItemPreview_ZeroPrice() {
     PracticeTheme {
         ProductItem(
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
             product = Product(
                 id = 1,
                 name = "상품명",
@@ -164,8 +177,10 @@ private fun ProductItemPreview_Show_Count() {
     PracticeTheme {
         ProductItem(
             product = dummyProducts[0],
-            cartItem = CartItem(dummyProducts[0], count = 99),
+            count = 99,
             onClick = {},
+            onCountPlus = {},
+            onCountMinus = {},
         )
     }
 }

@@ -41,9 +41,9 @@ import vallab.practice.ui.theme.PracticeTheme
 fun CartDetailItem(
     modifier: Modifier = Modifier,
     cartItem: CartItem,
-    onCountPlus: () -> Unit = {},
-    onCountMinus: () -> Unit = {},
-    onRemoveAll: () -> Unit = {},
+    onCountPlus: () -> Unit,
+    onCountMinus: () -> Unit,
+    onRemoveAll: () -> Unit,
 ) {
     OutlinedCard(
         shape = RoundedCornerShape(4.dp),
