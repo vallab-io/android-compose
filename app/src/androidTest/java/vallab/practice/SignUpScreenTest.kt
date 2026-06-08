@@ -39,6 +39,18 @@ class SignUpScreenTest {
     }
 
     @Test
+    fun `비밀번호가_일치하지_않으면_에러메시지가_보이고_가입_버튼이_비활성화된다`() {
+        composeTestRule.onNodeWithText("UserName").performTextInput("김김김")
+        composeTestRule.onNodeWithText("email").performTextInput("android12@naver.com")
+        composeTestRule.onNodeWithText("Password").performTextInput("a12345678")
+        composeTestRule.onNodeWithText("Password Confirm").performTextInput("a1234567999")
+        composeTestRule.onNodeWithText("비밀번호가 일치하지 않습니다.").assertExists()
+
+
+        composeTestRule.onNodeWithText("sign up").assertIsNotEnabled()
+    }
+
+    @Test
     fun `입력이_하나라도_부족하면_가입_버튼이_비활성화된다`() {
 
         // UserName 미입력

@@ -68,6 +68,17 @@ class InputValidationTest {
     }
 
     @Test
+    fun `이름_형식이_틀리면_에러메시지가_노출된다`() {
+        // when
+        username.value = "김컴포즈1"
+
+        // then
+        composeTestRule
+            .onNodeWithText("이름에는 숫자나 기호가 포함될 수 없습니다.")
+            .assertExists()
+    }
+
+    @Test
     fun 사용자_이름은_2에서_5자여야_한다() {
         // when
         username.value = "김컴포즈"
@@ -87,6 +98,17 @@ class InputValidationTest {
         composeTestRule
             .onNodeWithText("이름은 2자 이상 5자 이하로 입력해주세요.")
             .assertExists()
+    }
+
+    @Test
+    fun `이메일_형식이_올바르면_에러메시지가_노출되지_않는다`() {
+        // when
+        email.value = "android12@naver.com"
+
+        // then
+        composeTestRule
+            .onNodeWithText("이메일 형식이 올바르지 않습니다.")
+            .assertDoesNotExist()
     }
 
     @Test
