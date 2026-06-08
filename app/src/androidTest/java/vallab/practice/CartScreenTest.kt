@@ -76,7 +76,8 @@ class CartScreenTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("수량 조절 버튼")
+            .onAllNodesWithContentDescription("수량 조절 버튼")
+            .onFirst()
             .assertExists()
     }
 
