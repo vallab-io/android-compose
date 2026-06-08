@@ -37,10 +37,24 @@ fun PasswordTextField(
     )
 }
 
+@Preview(name = "정상 입력", showBackground = true)
+@Composable
+private fun PasswordTextField_Preview() {
+    PracticeTheme {
+        PasswordTextField(
+            value = "a123456789",
+            onValueChange = {},
+            label = "Password",
+            isError = false,
+            errorMessage = ""
+        )
+    }
+}
+
 
 @Preview(name = "비밀번호 포맷 에러", showBackground = true)
 @Composable
-private fun PasswordFormatErrorPreview() {
+private fun PasswordTextField_Preview_FormatError() {
     PracticeTheme {
         PasswordTextField(
             value = "abcdefgh",

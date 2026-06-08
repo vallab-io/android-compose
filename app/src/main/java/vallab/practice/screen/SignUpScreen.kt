@@ -118,17 +118,10 @@ fun SignUpScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun SignUpScreenPreview() {
-    PracticeTheme {
-        SignUpScreen()
-    }
-}
 
-@Preview(name = "값이 있을때", showBackground = true)
+@Preview(name = "모든값이 있을때", showBackground = true)
 @Composable
-private fun FilledTextPreview() {
+private fun SignUpScreen_Preview() {
     PracticeTheme {
         Column(
             modifier = Modifier
@@ -136,18 +129,110 @@ private fun FilledTextPreview() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = "Welcome to Compose 🚀",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
             SignUpTextField(
                 modifier = Modifier.padding(top = 36.dp),
-                value = "홍길동",
+                value = "김김김",
                 onValueChange = {},
-                label = "UserName"
+                label = "UserName",
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "android12@naver.com",
+                onValueChange = {},
+                label = "email",
             )
             PasswordTextField(
                 modifier = Modifier.padding(top = 30.dp),
                 value = "abc12345",
                 onValueChange = {},
-                label = "Password"
+                label = "Password",
             )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12345",
+                onValueChange = {},
+                label = "Password Confirm",
+            )
+            Button(
+                onClick = {},
+                enabled = true,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.blue_100),
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+            ) {
+                Text("sign up")
+            }
+        }
+    }
+}
+
+@Preview(name = "모든 상태 에러", showBackground = true)
+@Composable
+private fun SignUpScreenPreview_AllError() {
+    PracticeTheme {
+        Column(
+            modifier = Modifier
+                .padding(top = 112.dp, start = 32.dp, end = 32.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Welcome to Compose 🚀",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 36.dp),
+                value = "김",
+                onValueChange = {},
+                label = "UserName",
+                isError = true,
+                errorMessage = "이름은 2자 이상 5자 이하로 입력해주세요.",
+            )
+            SignUpTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "android@",
+                onValueChange = {},
+                label = "email",
+                isError = true,
+                errorMessage = "이메일 형식이 올바르지 않습니다.",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc123",
+                onValueChange = {},
+                label = "Password",
+                isError = true,
+                errorMessage = "비밀번호는 8~16자여야 합니다.",
+            )
+            PasswordTextField(
+                modifier = Modifier.padding(top = 30.dp),
+                value = "abc12346",
+                onValueChange = {},
+                label = "Password Confirm",
+                isError = true,
+                errorMessage = "비밀번호가 일치하지 않습니다.",
+            )
+            Button(
+                onClick = {},
+                enabled = false,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.blue_100),
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+            ) {
+                Text("sign up")
+            }
         }
     }
 }

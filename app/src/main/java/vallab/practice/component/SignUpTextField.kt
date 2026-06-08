@@ -30,10 +30,24 @@ fun SignUpTextField(
     )
 }
 
+@Preview(name = "정상 입력", showBackground = true)
+@Composable
+private fun SignUpTextField_Preview() {
+    PracticeTheme {
+        SignUpTextField(
+            value = "김김김",
+            onValueChange = {},
+            label = "UserName",
+            isError = false,
+            errorMessage = ""
+        )
+    }
+}
+
 
 @Preview(name = "사용자이름 에러", showBackground = true)
 @Composable
-private fun UserNameErrorPreview() {
+private fun SignUpTextField_Preview_UserNameError() {
     PracticeTheme {
         SignUpTextField(
             value = "김",
