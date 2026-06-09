@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import vallab.practice.R
 import vallab.practice.component.NewCardTopBar
 import vallab.practice.component.PaymentCard
 import vallab.practice.ui.theme.PracticeTheme
@@ -53,32 +55,32 @@ fun NewCardScreen(
             OutlinedTextField(
                 value = cardNumber,
                 onValueChange = viewModel::setCardNumber,
-                label = { Text("카드 번호") },
-                placeholder = { Text("0000 - 0000 - 0000 - 0000") },
+                label = { Text(stringResource(R.string.text_card_number)) },
+                placeholder = { Text(stringResource(R.string.placeholder_card)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
             OutlinedTextField(
                 value = expiredDate,
                 onValueChange = viewModel::setExpiredDate,
-                label = { Text("만료일") },
-                placeholder = { Text("MM / YY") },
+                label = { Text(stringResource(R.string.text_expiration)) },
+                placeholder = { Text(stringResource(R.string.placeholder_card_expiration_date)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
             OutlinedTextField(
                 value = ownerName,
                 onValueChange = viewModel::setOwnerName,
-                label = { Text("카드 소유자 이름(선택)") },
-                placeholder = { Text("카드에 표시된 이름을 입력하세요.") },
+                label = { Text(stringResource(R.string.text_card_user_name)) },
+                placeholder = { Text(stringResource(R.string.placeholder_card_user_name)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
             OutlinedTextField(
                 value = password,
                 onValueChange = viewModel::setPassword,
-                label = { Text("비밀번호") },
-                placeholder = { Text("0000") },
+                label = { Text(stringResource(R.string.text_password)) },
+                placeholder = { Text(stringResource(R.string.placeholder_password)) },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
             )
