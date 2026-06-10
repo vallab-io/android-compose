@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">android-compose</string>
+    <string name="placeholder_card">0000 - 0000 - 0000 - 0000</string>
+    <string name="text_card_number">카드 번호</string>
+    <string name="text_expiration">만료일</string>
+    <string name="placeholder_card_expiration_date">MM / YY</string>
+    <string name="text_card_user_name">카드 소유자 이름(선택)</string>
+    <string name="placeholder_card_user_name">카드에 표시된 이름을 입력하세요.</string>
+    <string name="text_password">비밀번호</string>
+    <string name="placeholder_password">0000</string>
+    <string name="add_card">카드 추가</string>
+    <string name="description_back">뒤로 가기</string>
+    <string name="description_finish">완료</string>
+
+    <string name="owner_name_length_error">이름은 30자 이하로 입력해주세요.</string>
 </resources>
