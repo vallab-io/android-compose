@@ -118,3 +118,32 @@ private fun NewCardScreen_Preview() {
         NewCardScreen()
     }
 }
+
+@Preview(name = "카드번호/만료일 입력")
+@Composable
+private fun NewCardScreen_Preview_Separator() {
+    PracticeTheme {
+        val viewModel = remember {
+            NewCardViewModel().apply {
+                setCardNumber("1234567812345678")
+                setExpiredDate("0123")
+            }
+        }
+        NewCardScreen(viewModel = viewModel)
+    }
+}
+
+@Preview(name = "이름이 30자 넘어갔을 때")
+@Composable
+private fun NewCardScreen_Preview_OwnerNameError() {
+    PracticeTheme {
+        val viewModel = remember {
+            NewCardViewModel().apply {
+                setOwnerName("김".repeat(31))
+            }
+        }
+        PracticeTheme {
+            NewCardScreen(viewModel = viewModel)
+        }
+    }
+}
