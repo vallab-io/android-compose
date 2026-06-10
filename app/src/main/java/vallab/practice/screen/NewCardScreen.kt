@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,9 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import vallab.practice.R
+import vallab.practice.component.CardNumberVisualTransformation
+import vallab.practice.component.ExpiryDateVisualTransformation
 import vallab.practice.component.NewCardTopBar
 import vallab.practice.component.PaymentCard
 import vallab.practice.ui.theme.PracticeTheme
+import vallab.practice.validation.CardValidation
+import vallab.practice.validation.OwnerNameValidation
 
 
 @Composable
@@ -34,6 +39,10 @@ fun NewCardScreen(
     val expiredDate by viewModel.expiredDate.collectAsStateWithLifecycle()
     val ownerName by viewModel.ownerName.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
+
+
+    val cardValidation = remember { CardValidation() }
+    val ownerNameError = cardValidation.validateOwnerName(ownerName)
 
     Scaffold(
         topBar = { NewCardTopBar(onBackClick = { TODO() }, onSaveClick = { TODO() }) },
@@ -55,6 +64,7 @@ fun NewCardScreen(
             OutlinedTextField(
                 value = cardNumber,
                 onValueChange = viewModel::setCardNumber,
+                visualTransformation = CardNumberVisualTransformation,
                 label = { Text(stringResource(R.string.text_card_number)) },
                 placeholder = { Text(stringResource(R.string.placeholder_card)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -63,6 +73,7 @@ fun NewCardScreen(
             OutlinedTextField(
                 value = expiredDate,
                 onValueChange = viewModel::setExpiredDate,
+                visualTransformation = ExpiryDateVisualTransformation,
                 label = { Text(stringResource(R.string.text_expiration)) },
                 placeholder = { Text(stringResource(R.string.placeholder_card_expiration_date)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -72,6 +83,12 @@ fun NewCardScreen(
                 value = ownerName,
                 onValueChange = viewModel::setOwnerName,
                 label = { Text(stringResource(R.string.text_card_user_name)) },
+                isError = ownerNameError != null,
+                supportingText = {
+                    ownerNameError?.let { message ->
+                        Text(ownerNameErrorMessage(message))
+                    }
+                },
                 placeholder = { Text(stringResource(R.string.placeholder_card_user_name)) },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -87,6 +104,12 @@ fun NewCardScreen(
         }
     }
 }
+
+@Composable
+private fun ownerNameErrorMessage(message: OwnerNameValidation): String = when (message) {
+    OwnerNameValidation.INVALID_LENGTH -> stringResource(R.string.owner_name_length_error)
+}
+
 
 @Preview
 @Composable

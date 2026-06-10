@@ -11,4 +11,6 @@
     <string name="add_card">카드 추가</string>
     <string name="description_back">뒤로 가기</string>
     <string name="description_finish">완료</string>
+
+    <string name="owner_name_length_error">이름은 30자 이하로 입력해주세요.</string>
 </resources>
