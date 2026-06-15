@@ -77,7 +77,8 @@ fun PaymentsScreen(
 
                 is CreditCardUiState.Many -> {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(32.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp)
