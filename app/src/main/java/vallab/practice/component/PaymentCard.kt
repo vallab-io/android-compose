@@ -11,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import vallab.practice.model.Card
 
 @Composable
 fun PaymentCard(
     modifier: Modifier = Modifier,
+    card: Card?= null
 ) {
     Box(
         contentAlignment = Alignment.CenterStart,
