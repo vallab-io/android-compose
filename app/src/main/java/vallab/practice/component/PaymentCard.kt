@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import vallab.practice.model.Card
+import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
 fun PaymentCard(modifier: Modifier = Modifier) {
@@ -117,4 +119,29 @@ private fun maskCardNumber(cardNumber: String): String {
     val first = parts.getOrElse(0) { "****" }
     val second = parts.getOrElse(1) { "****" }
     return "$first - $second - **** - ****"
+}
+
+
+@Preview(name = "기본 빈 화면")
+@Composable
+private fun PaymentCard_Preview() {
+    PracticeTheme {
+        PaymentCard()
+    }
+}
+
+
+@Preview(name = "카드 정보 입력")
+@Composable
+private fun PaymentCard_Preview_Input_Information() {
+    PracticeTheme {
+        PaymentCard(
+            card = Card(
+                cardNumber = "1234567812345678",
+                expiredDate = "1234",
+                ownerName = "홍길동",
+                password = "1234"
+            )
+        )
+    }
 }
