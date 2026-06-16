@@ -25,7 +25,10 @@ class NewCardScreenTest {
                         setOwnerName("김".repeat(31))
                     }
                 }
-                NewCardScreen(viewModel = viewModel)
+                NewCardScreen(
+                    viewModel = viewModel,
+                    onBackClick = {},
+                    navigateToCardList = {})
             }
         }
 
@@ -44,7 +47,10 @@ class NewCardScreenTest {
                         setOwnerName("김".repeat(30))
                     }
                 }
-                NewCardScreen(viewModel = viewModel)
+                NewCardScreen(
+                    viewModel = viewModel,
+                    onBackClick = {},
+                    navigateToCardList = {})
             }
         }
 
@@ -63,7 +69,10 @@ class NewCardScreenTest {
                         setCardNumber("1234567812345678")
                     }
                 }
-                NewCardScreen(viewModel = viewModel)
+                NewCardScreen(
+                    viewModel = viewModel,
+                    onBackClick = {},
+                    navigateToCardList = {})
             }
         }
         composeRule
@@ -80,7 +89,10 @@ class NewCardScreenTest {
                         setExpiredDate("0123")
                     }
                 }
-                NewCardScreen(viewModel = viewModel)
+                NewCardScreen(
+                    viewModel = viewModel,
+                    onBackClick = {},
+                    navigateToCardList = {})
             }
         }
         composeRule

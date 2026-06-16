@@ -13,4 +13,7 @@
     <string name="description_finish">완료</string>
 
     <string name="owner_name_length_error">이름은 30자 이하로 입력해주세요.</string>
+    <string name="title_payments">Payments</string>
+    <string name="register_new_card">새로운 카드를 등록해주세요</string>
+    <string name="add">추가</string>
 </resources>

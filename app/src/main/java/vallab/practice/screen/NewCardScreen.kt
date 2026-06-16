@@ -10,6 +10,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,11 +20,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import vallab.practice.R
 import vallab.practice.component.CardNumberVisualTransformation
 import vallab.practice.component.ExpiryDateVisualTransformation
 import vallab.practice.component.NewCardTopBar
+import vallab.practice.component.CardFrame
 import vallab.practice.component.PaymentCard
 import vallab.practice.ui.theme.PracticeTheme
 import vallab.practice.validation.CardValidation
@@ -33,19 +34,30 @@ import vallab.practice.validation.OwnerNameValidation
 @Composable
 fun NewCardScreen(
     modifier: Modifier = Modifier,
-    viewModel: NewCardViewModel = viewModel(),
+    navigateToCardList: () -> Unit,
+    onBackClick: () -> Unit,
+    viewModel: NewCardViewModel
 ) {
     val cardNumber by viewModel.cardNumber.collectAsStateWithLifecycle()
     val expiredDate by viewModel.expiredDate.collectAsStateWithLifecycle()
     val ownerName by viewModel.ownerName.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
+    val cardAdded by viewModel.cardAdded.collectAsStateWithLifecycle()
 
+
+    LaunchedEffect(cardAdded) {
+        if (cardAdded) navigateToCardList()
+    }
 
     val cardValidation = remember { CardValidation() }
     val ownerNameError = cardValidation.validateOwnerName(ownerName)
 
     Scaffold(
-        topBar = { NewCardTopBar(onBackClick = { TODO() }, onSaveClick = { TODO() }) },
+        topBar = {
+            NewCardTopBar(
+                onBackClick = onBackClick,
+                onSaveClick = { viewModel.addCard() })
+        },
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -115,7 +127,11 @@ private fun ownerNameErrorMessage(message: OwnerNameValidation): String = when (
 @Composable
 private fun NewCardScreen_Preview() {
     PracticeTheme {
-        NewCardScreen()
+        NewCardScreen(
+            viewModel = remember { NewCardViewModel() },
+            navigateToCardList = {},
+            onBackClick = {}
+        )
     }
 }
 
@@ -129,7 +145,10 @@ private fun NewCardScreen_Preview_Separator() {
                 setExpiredDate("0123")
             }
         }
-        NewCardScreen(viewModel = viewModel)
+        NewCardScreen(
+            viewModel = viewModel,
+            navigateToCardList = {},
+            onBackClick = {})
     }
 }
 
@@ -143,7 +162,10 @@ private fun NewCardScreen_Preview_OwnerNameError() {
             }
         }
         PracticeTheme {
-            NewCardScreen(viewModel = viewModel)
+            NewCardScreen(
+                viewModel = viewModel,
+                navigateToCardList = {},
+                onBackClick = {})
         }
     }
 }
