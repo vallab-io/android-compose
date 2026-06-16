@@ -27,11 +27,11 @@ class NewCardViewModel(
     val cardAdded: StateFlow<Boolean> = _cardAdded.asStateFlow()
 
     fun setCardNumber(cardNumber: String) {
-        _cardNumber.value = cardNumber
+        _cardNumber.value = cardNumber.filter { it.isDigit() }.take(16)
     }
 
     fun setExpiredDate(expiredDate: String) {
-        _expiredDate.value = expiredDate
+        _expiredDate.value = expiredDate.filter { it.isDigit() }.take(4)
     }
 
     fun setOwnerName(ownerName: String) {
