@@ -24,6 +24,7 @@ import vallab.practice.R
 import vallab.practice.component.CardNumberVisualTransformation
 import vallab.practice.component.ExpiryDateVisualTransformation
 import vallab.practice.component.NewCardTopBar
+import vallab.practice.component.CardFrame
 import vallab.practice.component.PaymentCard
 import vallab.practice.ui.theme.PracticeTheme
 import vallab.practice.validation.CardValidation
