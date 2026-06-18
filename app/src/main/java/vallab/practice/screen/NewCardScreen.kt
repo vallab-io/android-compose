@@ -179,3 +179,19 @@ private fun NewCardScreen_Preview_OwnerNameError() {
         }
     }
 }
+
+@Preview
+@Composable
+private fun NewCardScreen_Preview_selectedCard() {
+    PracticeTheme {
+        val viewModel = remember {
+            NewCardViewModel().apply { setBankType(BankType.KAKAO) }
+        }
+
+        NewCardScreen(
+            viewModel = viewModel,
+            navigateToCardList = {},
+            onBackClick = {}
+        )
+    }
+}
