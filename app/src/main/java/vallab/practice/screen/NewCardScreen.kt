@@ -21,11 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import vallab.practice.R
+import vallab.practice.component.BankSelectBottomSheet
 import vallab.practice.component.CardNumberVisualTransformation
 import vallab.practice.component.ExpiryDateVisualTransformation
 import vallab.practice.component.NewCardTopBar
-import vallab.practice.component.CardFrame
 import vallab.practice.component.PaymentCard
+import vallab.practice.model.BankType
 import vallab.practice.ui.theme.PracticeTheme
 import vallab.practice.validation.CardValidation
 import vallab.practice.validation.OwnerNameValidation
@@ -44,6 +45,8 @@ fun NewCardScreen(
     val password by viewModel.password.collectAsStateWithLifecycle()
     val cardAdded by viewModel.cardAdded.collectAsStateWithLifecycle()
 
+    val bankType by viewModel.bankType.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(cardAdded) {
         if (cardAdded) navigateToCardList()
@@ -51,6 +54,13 @@ fun NewCardScreen(
 
     val cardValidation = remember { CardValidation() }
     val ownerNameError = cardValidation.validateOwnerName(ownerName)
+
+
+    if (bankType == BankType.NOT_SELECTED) {
+        BankSelectBottomSheet(
+            onBankSelected = { viewModel.setBankType(it) },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -69,7 +79,7 @@ fun NewCardScreen(
         ) {
             Spacer(modifier = Modifier.height(14.dp))
 
-            PaymentCard()
+            PaymentCard(bankType = bankType)
 
             Spacer(modifier = Modifier.height(10.dp))
 

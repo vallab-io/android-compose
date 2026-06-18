@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.repository.PaymentCardsRepository
 
@@ -26,6 +27,9 @@ class NewCardViewModel(
     private val _cardAdded = MutableStateFlow<Boolean>(false)
     val cardAdded: StateFlow<Boolean> = _cardAdded.asStateFlow()
 
+    private val _bankType = MutableStateFlow(BankType.NOT_SELECTED)
+    val bankType: StateFlow<BankType> = _bankType.asStateFlow()
+
     fun setCardNumber(cardNumber: String) {
         _cardNumber.value = cardNumber.filter { it.isDigit() }.take(16)
     }
@@ -42,6 +46,10 @@ class NewCardViewModel(
         _password.value = password
     }
 
+    fun setBankType(bankType: BankType) {
+        _bankType.value = bankType
+    }
+
     fun addCard() {
         repository.addCard(
             Card(
@@ -49,6 +57,7 @@ class NewCardViewModel(
                 expiredDate = _expiredDate.value,
                 ownerName = _ownerName.value,
                 password = _password.value,
+                bankType = _bankType.value
             )
         )
         _cardAdded.value = true
