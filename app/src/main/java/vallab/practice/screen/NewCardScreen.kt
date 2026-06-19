@@ -59,6 +59,7 @@ fun NewCardScreen(
     if (bankType == BankType.NOT_SELECTED) {
         BankSelectBottomSheet(
             onBankSelected = { viewModel.setBankType(it) },
+            onDismiss = onBackClick
         )
     }
 
