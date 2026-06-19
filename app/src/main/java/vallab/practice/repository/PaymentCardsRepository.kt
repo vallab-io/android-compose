@@ -10,4 +10,8 @@ object PaymentCardsRepository {
     fun addCard(card: Card) {
         _cards.add(card)
     }
+
+    fun updateCard(index: Int, card: Card) {
+        _cards[index] = card
+    }
 }
