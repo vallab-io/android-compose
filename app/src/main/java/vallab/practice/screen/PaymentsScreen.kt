@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import vallab.practice.R
 import vallab.practice.component.AddCardButton
 import vallab.practice.component.PaymentCard
+import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.ui.theme.PracticeTheme
 
@@ -203,7 +204,7 @@ private fun PaymentScreen_Preview_One() {
         PaymentsScreenContent(
             uiState = CreditCardUiState.One(
                 card = Card(
-                    "1234567812345678", "1234", "홍길동", "1234"
+                    "1234567812345678", "1234", "홍길동", "1234", BankType.BC
                 )
             ),
             onAddCardClick = {}
@@ -222,25 +223,29 @@ private fun PaymentScreen_Preview_Many() {
                         cardNumber = "1234567812345678",
                         expiredDate = "1234",
                         ownerName = "홍길동",
-                        password = "1234"
+                        password = "1234",
+                        bankType = BankType.BC
                     ),
                     Card(
                         cardNumber = "1234567812345678",
                         expiredDate = "1234",
                         ownerName = "홍길동",
-                        password = "1234"
+                        password = "1234",
+                        bankType = BankType.BC
                     ),
                     Card(
                         cardNumber = "1234567812345678",
                         expiredDate = "1234",
                         ownerName = "홍길동",
-                        password = "1234"
+                        password = "1234",
+                        bankType = BankType.BC
                     ),
                     Card(
                         cardNumber = "1234567812345678",
                         expiredDate = "1234",
                         ownerName = "홍길동",
-                        password = "1234"
+                        password = "1234",
+                        bankType = BankType.BC
                     )
                 )
             ),

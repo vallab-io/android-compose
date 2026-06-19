@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import org.junit.Rule
 import org.junit.Test
+import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.screen.CreditCardUiState
 import vallab.practice.screen.PaymentsScreenContent
@@ -19,6 +20,7 @@ class PaymentCardScreenTest {
         expiredDate = "1234",
         ownerName = "홍길동",
         password = "1234",
+        bankType = BankType.BC
     )
 
 

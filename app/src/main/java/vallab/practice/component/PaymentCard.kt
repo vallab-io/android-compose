@@ -19,12 +19,21 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.ui.theme.PracticeTheme
 
 @Composable
-fun PaymentCard(modifier: Modifier = Modifier) {
-    CardFrame(modifier = modifier)
+fun PaymentCard(
+    modifier: Modifier = Modifier,
+    bankType: BankType = BankType.NOT_SELECTED
+) {
+    CardFrame(
+        modifier = modifier,
+        cardColor = if (bankType == BankType.NOT_SELECTED) Color(0xFF333333) else bankType.cardColor,
+        cardName = if (bankType == BankType.NOT_SELECTED) "" else bankType.cardName
+
+    )
 }
 
 
@@ -32,8 +41,13 @@ fun PaymentCard(modifier: Modifier = Modifier) {
 fun PaymentCard(
     modifier: Modifier = Modifier,
     card: Card
+
 ) {
-    CardFrame(modifier = modifier) {
+    CardFrame(
+        modifier = modifier,
+        cardColor = card.bankType.cardColor,
+        cardName = card.bankType.cardName
+    ) {
         CardDetails(card)
     }
 }
@@ -42,6 +56,8 @@ fun PaymentCard(
 @Composable
 fun CardFrame(
     modifier: Modifier = Modifier,
+    cardColor: Color,
+    cardName: String = "",
     content: @Composable () -> Unit = {}
 ) {
     Box(
@@ -50,10 +66,22 @@ fun CardFrame(
             .shadow(8.dp)
             .size(width = 208.dp, height = 124.dp)
             .background(
-                color = Color(0xFF333333),
+                color = cardColor,
                 shape = RoundedCornerShape(5.dp),
             )
     ) {
+        if (cardName.isNotEmpty()) {
+            Text(
+                text = cardName,
+                color = Color.White,
+                fontSize = 10.sp,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 14.dp)
+            )
+        }
+
+
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -140,7 +168,8 @@ private fun PaymentCard_Preview_Input_Information() {
                 cardNumber = "1234567812345678",
                 expiredDate = "1234",
                 ownerName = "홍길동",
-                password = "1234"
+                password = "1234",
+                bankType = BankType.BC
             )
         )
     }
