@@ -47,6 +47,11 @@ fun NewCardScreen(
 
     val bankType by viewModel.bankType.collectAsStateWithLifecycle()
 
+    val isModifying by viewModel.isModifying.collectAsStateWithLifecycle()
+    val isChanged by viewModel.isChanged.collectAsStateWithLifecycle()
+
+    val isSaveEnabled = !isModifying || isChanged
+
 
     LaunchedEffect(cardAdded) {
         if (cardAdded) navigateToCardList()
@@ -56,7 +61,7 @@ fun NewCardScreen(
     val ownerNameError = cardValidation.validateOwnerName(ownerName)
 
 
-    if (bankType == BankType.NOT_SELECTED) {
+    if (!isModifying && bankType == BankType.NOT_SELECTED) {
         BankSelectBottomSheet(
             onBankSelected = { viewModel.setBankType(it) },
             onDismiss = onBackClick
@@ -67,7 +72,10 @@ fun NewCardScreen(
         topBar = {
             NewCardTopBar(
                 onBackClick = onBackClick,
-                onSaveClick = { viewModel.addCard() })
+                onSaveClick = { viewModel.addCard() },
+                isModifying = isModifying,
+                isSaveEnabled = isSaveEnabled
+            )
         },
         modifier = modifier
     ) { innerPadding ->
