@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -36,6 +37,7 @@ import vallab.practice.ui.theme.PracticeTheme
 fun PaymentsScreen(
     modifier: Modifier = Modifier,
     onAddCardClick: () -> Unit,
+    onCardClick: (Int) -> Unit,
     viewModel: PaymentsViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -86,7 +88,9 @@ fun PaymentsScreen(
                 is CreditCardUiState.One -> {
                     PaymentCard(
                         card = state.card,
-                        modifier = Modifier.padding(top = 24.dp)
+                        modifier = Modifier
+                            .padding(top = 24.dp)
+                            .clickable { onCardClick(0) },
                     )
                     AddCardButton(
                         onClick = onAddCardClick
@@ -101,8 +105,11 @@ fun PaymentsScreen(
                             .fillMaxWidth()
                             .padding(top = 16.dp)
                     ) {
-                        items(state.cards) { card ->
-                            PaymentCard(card = card)
+                        itemsIndexed(state.cards) { index, card ->
+                            PaymentCard(
+                                card = card,
+                                modifier = Modifier.clickable { onCardClick(index) },
+                            )
                         }
                     }
                 }
