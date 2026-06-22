@@ -11,7 +11,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import vallab.practice.R
+import vallab.practice.ui.theme.PracticeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,3 +48,30 @@ fun NewCardTopBar(
         modifier = modifier
     )
 }
+
+@Preview(showBackground = true, name = "카드 수정 & 버튼 비활성")
+@Composable
+private fun NewCardTopBar_Preview_Modifying() {
+    PracticeTheme {
+        NewCardTopBar(
+            isModifying = true,
+            isSaveEnabled = false,
+            onBackClick = {},
+            onSaveClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "카드 추가 & 버튼 활성")
+@Composable
+private fun NewCardTopBar_Preview_Add() {
+    PracticeTheme {
+        NewCardTopBar(
+            isModifying = false,
+            isSaveEnabled = true,
+            onBackClick = {},
+            onSaveClick = {},
+        )
+    }
+}
+
