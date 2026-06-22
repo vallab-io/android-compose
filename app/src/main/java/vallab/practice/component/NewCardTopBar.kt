@@ -16,12 +16,14 @@ import vallab.practice.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewCardTopBar(
+    modifier: Modifier = Modifier,
+    isModifying: Boolean,
+    isSaveEnabled: Boolean,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        title = { Text(stringResource(R.string.add_card)) },
+        title = { Text(stringResource(if (isModifying) R.string.modify_card else R.string.add_card)) },
         navigationIcon = {
             IconButton(onClick = { onBackClick() }) {
                 Icon(
@@ -31,7 +33,10 @@ fun NewCardTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { onSaveClick() }) {
+            IconButton(
+                onClick = { onSaveClick() },
+                enabled = isSaveEnabled
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
                     contentDescription = stringResource(R.string.description_finish),
