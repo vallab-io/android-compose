@@ -86,12 +86,7 @@ class NewCardViewModel(
 
     fun addCard() {
         val card = currentCard()
-        val index = modifyCardIndex
-        if (index != null) {
-            repository.updateCard(index, card)
-        } else {
-            repository.addCard(card)
-        }
+        modifyCardIndex?.let { repository.updateCard(it, card) } ?: repository.addCard(card)
         _cardAdded.value = true
 
     }
