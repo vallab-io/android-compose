@@ -41,11 +41,6 @@ class NewCardViewModel(
     private val _isChanged = MutableStateFlow(false)
     val isChanged: StateFlow<Boolean> = _isChanged.asStateFlow()
 
-
-    init {
-        modifyCardIndex?.let { loadCard(it) }
-    }
-
     fun loadCard(index: Int) {
         val card = repository.cards.getOrNull(index) ?: return
         modifyCardIndex = index
