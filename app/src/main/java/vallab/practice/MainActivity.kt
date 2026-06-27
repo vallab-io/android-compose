@@ -43,6 +43,11 @@ private fun RoutePayments(activity: MainActivity) {
             val intent = Intent(activity, NewCardActivity::class.java)
             launcher.launch(intent)
         },
+        onCardClick = { index ->
+            val intent = Intent(activity, NewCardActivity::class.java)
+                .putExtra(NewCardActivity.CARD_INDEX, index)
+            launcher.launch(intent)
+        }
     )
 }
 

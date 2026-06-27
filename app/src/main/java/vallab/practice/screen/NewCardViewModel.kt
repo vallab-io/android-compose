@@ -1,65 +1,94 @@
 package vallab.practice.screen
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.repository.PaymentCardsRepository
 
 class NewCardViewModel(
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
     private val repository: PaymentCardsRepository = PaymentCardsRepository
 ) : ViewModel() {
 
-    private val _cardNumber = MutableStateFlow("")
-    val cardNumber: StateFlow<String> = _cardNumber.asStateFlow()
+    private var modifyCardIndex: Int? = savedStateHandle["card_index"]
 
-    private val _expiredDate = MutableStateFlow("")
-    val expiredDate: StateFlow<String> = _expiredDate.asStateFlow()
+    private lateinit var originalCard: Card
 
-    private val _ownerName = MutableStateFlow("")
-    val ownerName: StateFlow<String> = _ownerName.asStateFlow()
+    private val _uiState = MutableStateFlow(NewCardUiState())
+    val uiState: StateFlow<NewCardUiState> = _uiState.asStateFlow()
 
-    private val _password = MutableStateFlow("")
-    val password: StateFlow<String> = _password.asStateFlow()
+    val isChanged: StateFlow<Boolean> = uiState
+        .map { state ->
+            if (!state.isModifying) false
+            else currentCard() != originalCard
+            }
 
-    private val _cardAdded = MutableStateFlow<Boolean>(false)
-    val cardAdded: StateFlow<Boolean> = _cardAdded.asStateFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = false,
+        )
 
-    private val _bankType = MutableStateFlow(BankType.NOT_SELECTED)
-    val bankType: StateFlow<BankType> = _bankType.asStateFlow()
+    fun loadCard(index: Int) {
+        val card = repository.cards.getOrNull(index) ?: return
+        modifyCardIndex = index
+        originalCard = card
+        _uiState.value = NewCardUiState(
+            cardNumber = card.cardNumber,
+            expiredDate = card.expiredDate,
+            ownerName = card.ownerName,
+            password = card.password,
+            bankType = card.bankType,
+            isModifying = true
+        )
+    }
 
     fun setCardNumber(cardNumber: String) {
-        _cardNumber.value = cardNumber.filter { it.isDigit() }.take(16)
+        _uiState.update {
+            it.copy(cardNumber = cardNumber.filter { number -> number.isDigit() }.take(16))
+        }
     }
 
     fun setExpiredDate(expiredDate: String) {
-        _expiredDate.value = expiredDate.filter { it.isDigit() }.take(4)
+        _uiState.update {
+            it.copy(expiredDate = expiredDate.filter { number -> number.isDigit() }.take(4))
+        }
     }
 
     fun setOwnerName(ownerName: String) {
-        _ownerName.value = ownerName
+        _uiState.update { it.copy(ownerName = ownerName) }
     }
 
     fun setPassword(password: String) {
-        _password.value = password
+        _uiState.update { it.copy(password = password) }
     }
 
     fun setBankType(bankType: BankType) {
-        _bankType.value = bankType
+        _uiState.update { it.copy(bankType = bankType) }
     }
 
     fun addCard() {
-        repository.addCard(
-            Card(
-                cardNumber = _cardNumber.value,
-                expiredDate = _expiredDate.value,
-                ownerName = _ownerName.value,
-                password = _password.value,
-                bankType = _bankType.value
-            )
+        val card = currentCard()
+        modifyCardIndex?.let { repository.updateCard(it, card) } ?: repository.addCard(card)
+        _uiState.update { it.copy(cardAdded = true) }
+    }
+
+    private fun currentCard() = with(_uiState.value) {
+        Card(
+            cardNumber = cardNumber,
+            expiredDate = expiredDate,
+            ownerName = ownerName,
+            password = password,
+            bankType = bankType,
         )
-        _cardAdded.value = true
     }
 }

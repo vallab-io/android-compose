@@ -39,26 +39,24 @@ fun NewCardScreen(
     onBackClick: () -> Unit,
     viewModel: NewCardViewModel
 ) {
-    val cardNumber by viewModel.cardNumber.collectAsStateWithLifecycle()
-    val expiredDate by viewModel.expiredDate.collectAsStateWithLifecycle()
-    val ownerName by viewModel.ownerName.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
-    val cardAdded by viewModel.cardAdded.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isChanged by viewModel.isChanged.collectAsStateWithLifecycle()
 
-    val bankType by viewModel.bankType.collectAsStateWithLifecycle()
+    val isSaveEnabled = !uiState.isModifying || isChanged
 
 
-    LaunchedEffect(cardAdded) {
-        if (cardAdded) navigateToCardList()
+    LaunchedEffect(uiState.cardAdded) {
+        if (uiState.cardAdded) navigateToCardList()
     }
 
     val cardValidation = remember { CardValidation() }
-    val ownerNameError = cardValidation.validateOwnerName(ownerName)
+    val ownerNameError = cardValidation.validateOwnerName(uiState.ownerName)
 
 
-    if (bankType == BankType.NOT_SELECTED) {
+    if (!uiState.isModifying && uiState.bankType == BankType.NOT_SELECTED) {
         BankSelectBottomSheet(
             onBankSelected = { viewModel.setBankType(it) },
+            onDismiss = onBackClick
         )
     }
 
@@ -66,7 +64,10 @@ fun NewCardScreen(
         topBar = {
             NewCardTopBar(
                 onBackClick = onBackClick,
-                onSaveClick = { viewModel.addCard() })
+                onSaveClick = { viewModel.addCard() },
+                isModifying = uiState.isModifying,
+                isSaveEnabled = isSaveEnabled
+            )
         },
         modifier = modifier
     ) { innerPadding ->
@@ -79,12 +80,12 @@ fun NewCardScreen(
         ) {
             Spacer(modifier = Modifier.height(14.dp))
 
-            PaymentCard(bankType = bankType)
+            PaymentCard(bankType = uiState.bankType)
 
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = cardNumber,
+                value = uiState.cardNumber,
                 onValueChange = viewModel::setCardNumber,
                 visualTransformation = CardNumberVisualTransformation,
                 label = { Text(stringResource(R.string.text_card_number)) },
@@ -93,7 +94,7 @@ fun NewCardScreen(
             )
 
             OutlinedTextField(
-                value = expiredDate,
+                value = uiState.expiredDate,
                 onValueChange = viewModel::setExpiredDate,
                 visualTransformation = ExpiryDateVisualTransformation,
                 label = { Text(stringResource(R.string.text_expiration)) },
@@ -102,7 +103,7 @@ fun NewCardScreen(
             )
 
             OutlinedTextField(
-                value = ownerName,
+                value = uiState.ownerName,
                 onValueChange = viewModel::setOwnerName,
                 label = { Text(stringResource(R.string.text_card_user_name)) },
                 isError = ownerNameError != null,
@@ -116,7 +117,7 @@ fun NewCardScreen(
             )
 
             OutlinedTextField(
-                value = password,
+                value = uiState.password,
                 onValueChange = viewModel::setPassword,
                 label = { Text(stringResource(R.string.text_password)) },
                 placeholder = { Text(stringResource(R.string.placeholder_password)) },
