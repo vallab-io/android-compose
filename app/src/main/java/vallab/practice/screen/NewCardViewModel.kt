@@ -2,9 +2,14 @@ package vallab.practice.screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import vallab.practice.model.BankType
 import vallab.practice.model.Card
 import vallab.practice.repository.PaymentCardsRepository
@@ -17,85 +22,73 @@ class NewCardViewModel(
     private var modifyCardIndex: Int? = savedStateHandle["card_index"]
 
     private lateinit var originalCard: Card
-    private val _cardNumber = MutableStateFlow("")
-    val cardNumber: StateFlow<String> = _cardNumber.asStateFlow()
 
-    private val _expiredDate = MutableStateFlow("")
-    val expiredDate: StateFlow<String> = _expiredDate.asStateFlow()
+    private val _uiState = MutableStateFlow(NewCardUiState())
+    val uiState: StateFlow<NewCardUiState> = _uiState.asStateFlow()
 
-    private val _ownerName = MutableStateFlow("")
-    val ownerName: StateFlow<String> = _ownerName.asStateFlow()
+    val isChanged: StateFlow<Boolean> = uiState
+        .map { state ->
+            if (!state.isModifying) false
+            else currentCard() != originalCard
+            }
 
-    private val _password = MutableStateFlow("")
-    val password: StateFlow<String> = _password.asStateFlow()
-
-    private val _cardAdded = MutableStateFlow<Boolean>(false)
-    val cardAdded: StateFlow<Boolean> = _cardAdded.asStateFlow()
-
-    private val _bankType = MutableStateFlow(BankType.NOT_SELECTED)
-    val bankType: StateFlow<BankType> = _bankType.asStateFlow()
-
-    private val _isModifying = MutableStateFlow(modifyCardIndex != null)
-    val isModifying: StateFlow<Boolean> = _isModifying.asStateFlow()
-
-    private val _isChanged = MutableStateFlow(false)
-    val isChanged: StateFlow<Boolean> = _isChanged.asStateFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = false,
+        )
 
     fun loadCard(index: Int) {
         val card = repository.cards.getOrNull(index) ?: return
         modifyCardIndex = index
         originalCard = card
-        _cardNumber.value = card.cardNumber
-        _expiredDate.value = card.expiredDate
-        _ownerName.value = card.ownerName
-        _password.value = card.password
-        _bankType.value = card.bankType
-        _isModifying.value = true
-        _isChanged.value = false
+        _uiState.value = NewCardUiState(
+            cardNumber = card.cardNumber,
+            expiredDate = card.expiredDate,
+            ownerName = card.ownerName,
+            password = card.password,
+            bankType = card.bankType,
+            isModifying = true
+        )
     }
 
     fun setCardNumber(cardNumber: String) {
-        _cardNumber.value = cardNumber.filter { it.isDigit() }.take(16)
-        checkIsChanged()
+        _uiState.update {
+            it.copy(cardNumber = cardNumber.filter { number -> number.isDigit() }.take(16))
+        }
     }
 
     fun setExpiredDate(expiredDate: String) {
-        _expiredDate.value = expiredDate.filter { it.isDigit() }.take(4)
-        checkIsChanged()
+        _uiState.update {
+            it.copy(expiredDate = expiredDate.filter { number -> number.isDigit() }.take(4))
+        }
     }
 
     fun setOwnerName(ownerName: String) {
-        _ownerName.value = ownerName
-        checkIsChanged()
+        _uiState.update { it.copy(ownerName = ownerName) }
     }
 
     fun setPassword(password: String) {
-        _password.value = password
-        checkIsChanged()
+        _uiState.update { it.copy(password = password) }
     }
 
     fun setBankType(bankType: BankType) {
-        _bankType.value = bankType
-        checkIsChanged()
+        _uiState.update { it.copy(bankType = bankType) }
     }
 
     fun addCard() {
         val card = currentCard()
         modifyCardIndex?.let { repository.updateCard(it, card) } ?: repository.addCard(card)
-        _cardAdded.value = true
-
+        _uiState.update { it.copy(cardAdded = true) }
     }
 
-    private fun currentCard() = Card(
-        cardNumber = _cardNumber.value,
-        expiredDate = _expiredDate.value,
-        ownerName = _ownerName.value,
-        password = _password.value,
-        bankType = _bankType.value,
-    )
-
-    private fun checkIsChanged() {
-        if (!_isModifying.value) return
-        _isChanged.value = currentCard() != originalCard
+    private fun currentCard() = with(_uiState.value) {
+        Card(
+            cardNumber = cardNumber,
+            expiredDate = expiredDate,
+            ownerName = ownerName,
+            password = password,
+            bankType = bankType,
+        )
     }
 }
