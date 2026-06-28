@@ -5,9 +5,9 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import vallab.practice.GithubService
 import vallab.practice.data.repository.GithubRepository
 import vallab.practice.data.repository.GithubRepositoryImpl
+import vallab.practice.data.service.GithubService
 
 class AppContainer {
 
