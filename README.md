@@ -1,1 +1,10 @@
 # android-compose
+
+
+## Step1 GitHub — 데이터 레이어
+1. GitHub API Client 구현
+    - `GET https://api.github.com/orgs/next-step/repos` 호출
+    - `full_name`, `description` 필드만 사용
+2. data 패키지에 네트워크 요청 구현
+3. 수동 DI 구성 (Hilt 미사용)
+4. 서버 데이터 Logcat 확인
