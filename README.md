@@ -8,3 +8,10 @@
 2. data 패키지에 네트워크 요청 구현
 3. 수동 DI 구성 (Hilt 미사용)
 4. 서버 데이터 Logcat 확인
+
+
+## Step2 GitHub — UI 레이어
+1. NEXTSTEP 조직의 저장소 목록을 선형 리스트로 노출
+2. Material3 Theme의 Typography, Color를 활용
+3. ViewModel Factory를 구현
+4. 저장소 목록을 노출하는 UI는 ui 패키지에 구현
