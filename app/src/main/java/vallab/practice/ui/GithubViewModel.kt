@@ -23,16 +23,25 @@ class GithubViewModel(
         getRepositories()
     }
 
+    fun retry() {
+        getRepositories()
+    }
+
 
     private fun getRepositories() {
         viewModelScope.launch {
             _uiState.value = GithubUiState.Loading
-            val repositories = githubRepository.getRepositories("next-step")
 
-            if (repositories.isEmpty()) {
-                _uiState.value = GithubUiState.Empty
-            } else {
-                _uiState.value = GithubUiState.Success(repositories)
+            try {
+                val repositories = githubRepository.getRepositories("next-step")
+
+                if (repositories.isEmpty()) {
+                    _uiState.value = GithubUiState.Empty
+                } else {
+                    _uiState.value = GithubUiState.Success(repositories)
+                }
+            } catch (e: Exception) {
+                _uiState.value = GithubUiState.Error
             }
         }
     }

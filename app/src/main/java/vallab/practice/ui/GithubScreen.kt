@@ -11,11 +11,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +38,21 @@ fun GithubScreen(
     viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+
+    if (uiState is GithubUiState.Error) {
+        LaunchedEffect(uiState) {
+            when (snackbarHostState.showSnackbar(
+                message = context.getString(R.string.text_error_massage),
+                actionLabel = context.getString(R.string.text_retry)
+            )) {
+                SnackbarResult.ActionPerformed -> viewModel.retry()
+                SnackbarResult.Dismissed -> Unit
+            }
+        }
+    }
 
     Scaffold(
         modifier = modifier
@@ -42,7 +63,8 @@ fun GithubScreen(
                     Text(text = "NEXTSTEP Repositories")
                 }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
 
     ) { innerPadding ->
         when (val state = uiState) {
@@ -82,6 +104,8 @@ fun GithubScreen(
                     }
                 }
             }
+
+            GithubUiState.Error -> {}
         }
     }
 }
@@ -137,6 +161,10 @@ fun GithubScreenContent(
                     }
                 }
             }
+
+            GithubUiState.Error -> {
+
+            }
         }
     }
 }
@@ -178,5 +206,4 @@ private fun GithubScreen_Preview_Success() {
         )
     }
 }
-
 
