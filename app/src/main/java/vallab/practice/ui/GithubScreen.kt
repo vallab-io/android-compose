@@ -21,7 +21,7 @@ fun GithubScreen(
     modifier: Modifier = Modifier,
     viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Factory)
 ) {
-    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier
@@ -35,13 +35,42 @@ fun GithubScreen(
         }
 
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-        ) {
-            items(repositories) { item ->
-                GithubItem(repositoryEntity = item)
+        when (val state = uiState) {
+            GithubUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            GithubUiState.Empty -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.text_empty_list),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+            }
+
+            is GithubUiState.Success -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(innerPadding)
+                ) {
+                    items(state.repositories) { item ->
+                        GithubItem(repositoryEntity = item)
+                    }
+                }
             }
         }
     }

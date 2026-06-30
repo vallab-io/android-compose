@@ -11,15 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import vallab.practice.App
-import vallab.practice.data.model.RepositoryEntity
 import vallab.practice.data.repository.GithubRepository
 
 class GithubViewModel(
     val githubRepository: GithubRepository,
 ) : ViewModel() {
-
-    private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
-    val repositories: StateFlow<List<RepositoryEntity>> = _repositories.asStateFlow()
+    private val _uiState = MutableStateFlow<GithubUiState>(GithubUiState.Loading)
+    val uiState: StateFlow<GithubUiState> = _uiState.asStateFlow()
 
     init {
         getRepositories()
@@ -28,7 +26,14 @@ class GithubViewModel(
 
     private fun getRepositories() {
         viewModelScope.launch {
-            _repositories.value = githubRepository.getRepositories("next-step")
+            _uiState.value = GithubUiState.Loading
+            val repositories = githubRepository.getRepositories("next-step")
+
+            if (repositories.isEmpty()) {
+                _uiState.value = GithubUiState.Empty
+            } else {
+                _uiState.value = GithubUiState.Success(repositories)
+            }
         }
     }
 
