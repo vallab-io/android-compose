@@ -83,11 +83,15 @@ fun GithubScreenContent(
 ) {
 
     when (uiState) {
-        GithubUiState.Loading -> LoadingContent()
+        GithubUiState.Loading -> LoadingContent(modifier = modifier)
 
-        GithubUiState.Empty -> EmptyContent()
+        GithubUiState.Empty -> EmptyContent(modifier = modifier)
 
-        is GithubUiState.Success -> SuccessContent(repositories = uiState.repositories)
+        is GithubUiState.Success -> SuccessContent(
+            modifier = modifier,
+            repositories = uiState.repositories
+        )
+
         GithubUiState.Error -> {}
     }
 
