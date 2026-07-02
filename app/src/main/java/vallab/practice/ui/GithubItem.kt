@@ -70,9 +70,23 @@ fun GithubItem(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "HOT 노출 X")
 @Composable
-private fun GithubItem_Preview() {
+private fun GithubItem_Preview_Not_Show_HOT() {
+    PracticeTheme {
+        GithubItem(
+            repository = Repository(
+                "홍길동",
+                "홍길동입니다",
+                10
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "HOT 노출 O")
+@Composable
+private fun GithubItem_Preview_Show_HOT() {
     PracticeTheme {
         GithubItem(
             repository = Repository(
