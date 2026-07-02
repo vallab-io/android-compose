@@ -7,8 +7,12 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import org.junit.Rule
 import org.junit.Test
+import vallab.practice.data.model.RepositoryEntity
+import vallab.practice.data.repository.GithubRepository
+import vallab.practice.ui.GithubScreen
 import vallab.practice.ui.GithubScreenContent
 import vallab.practice.ui.GithubUiState
+import vallab.practice.ui.GithubViewModel
 import vallab.practice.ui.theme.PracticeTheme
 
 class GithubScreenTest {
@@ -43,11 +47,18 @@ class GithubScreenTest {
 
     @Test
     fun `에러_상태일_때_스낵바와_재시도_버튼이_노출되어야_한다`() {
+        val testRepository = object : GithubRepository {
+            override suspend fun getRepositories(organization: String): List<RepositoryEntity> {
+                throw Exception()
+            }
+        }
+
+        val testViewModel = GithubViewModel(testRepository)
+
         composeTestRule.setContent {
             PracticeTheme {
-                GithubScreenContent(
-                    uiState = GithubUiState.Error,
-                    onRetry = { },
+                GithubScreen(
+                    viewModel = testViewModel
                 )
             }
         }
