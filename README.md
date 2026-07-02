@@ -15,3 +15,10 @@
 2. Material3 Theme의 Typography, Color를 활용
 3. ViewModel Factory를 구현
 4. 저장소 목록을 노출하는 UI는 ui 패키지에 구현
+
+
+## Step3 GitHub — UI상태
+1. 목록이 로딩되기 전에는 로딩 UI를 노출한다.
+   - 로딩 UI를 노출할 때 CircularProgressIndicator를 활용한다.
+3. 목록이 빈 경우에는 빈 화면 UI를 노출한다.
+4. 오류가 발생한 경우 재시도 가능한 스낵바를 노출한다.

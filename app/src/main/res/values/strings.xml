@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">android-compose</string>
+    <string name="text_empty_list">목록이 비었습니다.</string>
+    <string name="text_error_massage">예상치 못한 오류가 발생했습니다.</string>
+    <string name="text_retry">재시도</string>
 </resources>

@@ -12,11 +12,10 @@ import vallab.practice.ui.theme.PracticeTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel: GithubViewModel by viewModels { GithubViewModel.Factory }
         enableEdgeToEdge()
         setContent {
             PracticeTheme {
-                GithubScreen(viewModel = viewModel)
+                GithubScreen()
             }
         }
     }
