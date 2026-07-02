@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import vallab.practice.R
-import vallab.practice.data.model.RepositoryEntity
+import vallab.practice.domain.Repository
 import vallab.practice.ui.theme.PracticeTheme
 
 
