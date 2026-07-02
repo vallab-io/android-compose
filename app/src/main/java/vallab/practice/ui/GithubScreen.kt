@@ -43,8 +43,8 @@ fun GithubScreen(
     val context = LocalContext.current
 
 
-    if (uiState is GithubUiState.Error) {
-        LaunchedEffect(uiState) {
+    LaunchedEffect(uiState) {
+        if (uiState is GithubUiState.Error) {
             when (snackbarHostState.showSnackbar(
                 message = context.getString(R.string.text_error_massage),
                 actionLabel = context.getString(R.string.text_retry)
@@ -68,46 +68,10 @@ fun GithubScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
 
     ) { innerPadding ->
-        when (val state = uiState) {
-            GithubUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            GithubUiState.Empty -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.text_empty_list),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-            }
-
-            is GithubUiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                ) {
-                    items(state.repositories) { item ->
-                        GithubItem(repositoryEntity = item)
-                    }
-                }
-            }
-
-            GithubUiState.Error -> {}
-        }
+        GithubScreenContent(
+            uiState = uiState,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 
@@ -116,77 +80,62 @@ fun GithubScreen(
 fun GithubScreenContent(
     uiState: GithubUiState,
     modifier: Modifier = Modifier,
-    onRetry: () -> Unit = {}
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
 
-    if (uiState is GithubUiState.Error) {
-        LaunchedEffect(uiState) {
-            when (
-                snackbarHostState.showSnackbar(
-                    message = context.getString(R.string.text_error_massage),
-                    actionLabel = context.getString(R.string.text_retry)
-                )
-            ) {
-                SnackbarResult.ActionPerformed -> onRetry()
-                SnackbarResult.Dismissed -> Unit
-            }
-        }
+    when (uiState) {
+        GithubUiState.Loading -> LoadingContent()
+
+        GithubUiState.Empty -> EmptyContent()
+
+        is GithubUiState.Success -> SuccessContent(repositories = uiState.repositories)
+        GithubUiState.Error -> {}
     }
 
-    Scaffold(
-        modifier = modifier.fillMaxWidth(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(text = "NEXTSTEP Repositories") },
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { innerPadding ->
-        when (val state = uiState) {
-            GithubUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier= Modifier.testTag("Indicator_Loading")
-                    )
-                }
-            }
 
-            GithubUiState.Empty -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.text_empty_list),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-            }
+}
 
-            is GithubUiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                ) {
-                    items(state.repositories) { item ->
-                        GithubItem(repositoryEntity = item)
-                    }
-                }
-            }
+@Composable
+private fun LoadingContent(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.testTag("Indicator_Loading")
+        )
+    }
+}
 
-            GithubUiState.Error -> {
+@Composable
+private fun EmptyContent(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.text_empty_list),
+            style = MaterialTheme.typography.headlineSmall
+        )
+    }
+}
 
-            }
+@Composable
+private fun SuccessContent(
+    modifier: Modifier = Modifier,
+    repositories: List<RepositoryEntity>
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        items(repositories) { item ->
+            GithubItem(repositoryEntity = item)
         }
     }
 }
