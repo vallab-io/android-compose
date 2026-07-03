@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import vallab.practice.App
+import vallab.practice.data.mapper.toDomain
 import vallab.practice.data.repository.GithubRepository
 
 class GithubViewModel(
@@ -34,6 +35,7 @@ class GithubViewModel(
 
             try {
                 val repositories = githubRepository.getRepositories("next-step")
+                    .map { it.toDomain() }
 
                 if (repositories.isEmpty()) {
                     _uiState.value = GithubUiState.Empty

@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import vallab.practice.R
-import vallab.practice.data.model.RepositoryEntity
+import vallab.practice.domain.Repository
 import vallab.practice.ui.theme.PracticeTheme
 
 
@@ -83,11 +83,15 @@ fun GithubScreenContent(
 ) {
 
     when (uiState) {
-        GithubUiState.Loading -> LoadingContent()
+        GithubUiState.Loading -> LoadingContent(modifier = modifier)
 
-        GithubUiState.Empty -> EmptyContent()
+        GithubUiState.Empty -> EmptyContent(modifier = modifier)
 
-        is GithubUiState.Success -> SuccessContent(repositories = uiState.repositories)
+        is GithubUiState.Success -> SuccessContent(
+            modifier = modifier,
+            repositories = uiState.repositories
+        )
+
         GithubUiState.Error -> {}
     }
 
@@ -128,14 +132,14 @@ private fun EmptyContent(
 @Composable
 private fun SuccessContent(
     modifier: Modifier = Modifier,
-    repositories: List<RepositoryEntity>
+    repositories: List<Repository>
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
     ) {
         items(repositories) { item ->
-            GithubItem(repositoryEntity = item)
+            GithubItem(repository = item)
         }
     }
 }
@@ -164,13 +168,15 @@ private fun GithubScreen_Preview_Success() {
         GithubScreenContent(
             uiState = GithubUiState.Success(
                 repositories = listOf(
-                    RepositoryEntity(
+                    Repository(
                         fullName = "홍길동",
                         description = "홍길동 입니다.",
+                        stars = 120
                     ),
-                    RepositoryEntity(
+                    Repository(
                         fullName = "김철수",
                         description = "김철수 입니다김철수 입니다김철수 입니다김철수 입니다김철수 입니다",
+                        stars = 10
                     )
                 )
             )

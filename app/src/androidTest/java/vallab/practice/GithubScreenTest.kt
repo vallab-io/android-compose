@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import vallab.practice.data.model.RepositoryEntity
 import vallab.practice.data.repository.GithubRepository
+import vallab.practice.domain.Repository
 import vallab.practice.ui.GithubScreen
 import vallab.practice.ui.GithubScreenContent
 import vallab.practice.ui.GithubUiState
@@ -69,4 +70,49 @@ class GithubScreenTest {
             .onNodeWithText("재시도")
             .performClick()
     }
+
+    @Test
+    fun `star의_갯수가_50개_미만이면_HOT_텍스트가_노출되지_않아야_한다`() {
+        composeTestRule.setContent {
+            PracticeTheme {
+                GithubScreenContent(
+                    GithubUiState.Success(
+                        listOf(
+                            Repository(
+                                fullName = "홍길동",
+                                description = "홍길동입니다",
+                                stars = 10
+                            )
+                        )
+                    )
+                )
+            }
+        }
+        composeTestRule
+            .onNodeWithText("HOT")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `star의_갯수가_50개_이상이면_HOT_텍스트가_노출되어야_한다`() {
+        composeTestRule.setContent {
+            PracticeTheme {
+                GithubScreenContent(
+                    GithubUiState.Success(
+                        listOf(
+                            Repository(
+                                fullName = "홍길동",
+                                description = "홍길동입니다",
+                                stars = 51
+                            )
+                        )
+                    )
+                )
+            }
+        }
+        composeTestRule
+            .onNodeWithText("HOT")
+            .assertIsDisplayed()
+    }
+
 }
